@@ -1,0 +1,286 @@
+/* Main nav */
+.subnav {
+	z-index: 1;
+	height: 51px;
+	color: #969696;
+}
+
+.subnav > div {
+	height: 100%;
+}
+
+.brand_img {
+	display: block;
+	min-width: 120px;
+	margin-top: 4px;
+	margin-right: 8px;
+}
+
+.web_options {
+	align-items: center;
+	height: 100%;
+}
+
+.nav_controls {
+	height: 100%;
+}
+
+.nav_options {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	font-size: 1.4rem;
+	letter-spacing: 1.05px;
+	font-weight: 400;
+	padding: 0 14px;
+	height: 100%;
+}
+.nav_options::after {
+	content: "";
+	position: absolute;
+	border-bottom: 0 solid #0d6efd;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.nav_options.active::after,
+.nav_options:hover::after {
+	content: "";
+	position: absolute;
+	border-width: 5px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transition: all ease-in 100ms;
+}
+
+.nav_options span {
+	font-size: 2rem;
+}
+
+.user_options {
+	min-width: 120px;
+}
+
+.user_options li a {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 40px;
+	padding: 4px 8px;
+	font-size: 1.4rem;
+}
+
+.user_options li:hover {
+	opacity: 0.7;
+	transition: all ease 300ms;
+}
+
+.user_options li i {
+	min-width: 25px;
+}
+.web_search {
+}
+
+.subnav_label {
+	font-size: 1rem;
+}
+.subnav .control-item {
+	padding: 0 10px;
+	border-left: 1px solid #5d5d5d;
+}
+
+.headnav_logo {
+	width: 150px;
+}
+
+.control-item a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.control-item span {
+	font-weight: 700;
+}
+
+/* Main nav */
+
+.headnav_services {
+	color: #969696;
+}
+
+.haednav_contacts span {
+	display: inline-block;
+	padding: 4px 2px;
+}
+
+.haednav_contacts span:last-child:hover {
+	color: aqua;
+	cursor: pointer;
+}
+
+.headnav_search {
+	display: flex;
+	justify-content: space-between;
+	width: var(--search-width);
+	height: var(--search-height);
+	border-radius: 999px;
+	overflow: hidden;
+	border: 1px solid #666;
+	background-color: rgb(32, 32, 32);
+}
+
+.headnav_search input {
+	font-size: 1.3rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	border: none;
+	outline: none;
+	white-space: nowrap;
+	color: rgb(245, 245, 245);
+	width: 100%;
+	margin-right: 14px;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.headnav_search span {
+	display: flex;
+	font-size: 1.2rem;
+	justify-content: center;
+	align-items: center;
+	color: rgb(245, 245, 245);
+	margin: 14px;
+	background: transparent;
+	cursor: pointer;
+}
+
+.wrapper_headnav {
+	width: 100%;
+	position: relative;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.headnav_item {
+	display: inline-flex;
+}
+
+.mobile_headnav_select {
+	font-size: 1.4rem;
+	max-width: 100px;
+	border: none;
+	outline: none;
+	height: 100%;
+	padding: 4px 6px;
+	margin-left: auto;
+}
+
+.mobile_headnav_select option {
+	background-color: #5d5d5d;
+	color: white;
+}
+.search_results {
+	display: none;
+}
+
+.search_results.active {
+	position: absolute;
+	display: block;
+	top: calc(var(--search-height) + 4px);
+	right: 0;
+	bottom: 4px;
+	z-index: 3;
+}
+
+#ListGames {
+	min-width: 380px;
+	max-width: 400px;
+}
+
+.search_result_wrapper {
+	display: flex;
+	flex-direction: column;
+	max-height: 40vh;
+	overflow-y: scroll;
+}
+
+.search_result_wrapper::-webkit-scrollbar {
+	width: 2px;
+	background-color: black;
+}
+
+.search_result_wrapper::-webkit-scrollbar-thumb {
+	background-color: gray;
+	border-radius: 2px;
+}
+
+.search_result_title {
+	--search_title_height: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 4px 8px;
+	height: var(--search_title_height);
+	font-size: 1.4rem;
+}
+
+.search_result_title > * {
+	flex: 1;
+}
+
+.nav-menu_item {
+	height: 40px;
+	padding: 10px;
+	color: #9a9a9a !important;
+	font-size: 1.4rem;
+	font-weight: normal;
+	letter-spacing: 0.2px;
+	line-height: 2rem;
+	margin-bottom: 0;
+}
+
+.nav-menu_item:hover,
+.nav-menu_item.active {
+	color: rgb(245, 245, 245) !important;
+	transition: all ease-in 200ms;
+}
+
+/* Global */
+.offcanvas_item {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	padding: 0 8px;
+	cursor: pointer;
+}
+
+.offcanvas_item + .offcanvas_item {
+	border-top: 1px solid #696969;
+}
+
+.offcanvas_item:hover {
+	opacity: 0.5;
+	transition: all ease-in 200ms;
+}
+
+.offcanvas_link {
+	font-size: 2rem;
+	flex-grow: 1;
+}
+
+/* Dropdown */
+.dropdown-toggle:hover {
+	transition: all ease 300ms;
+}
+.dropdown-toggle::after {
+	display: inline-block;
+	transform: translateY(50%);
+	margin-left: 0.255em;
+	vertical-align: 0.255em;
+	content: "";
+	border-top: 0.6em solid;
+	border-right: 0.6em solid transparent;
+	border-bottom: 0;
+	border-left: 0.6em solid transparent;
+}

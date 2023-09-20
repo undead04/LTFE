@@ -1,0 +1,42 @@
+.game_picture {
+	width: 100%;
+}
+
+.game_picture_wrapper {
+	height: 1px;
+	padding-bottom: calc(4 / 3 * 100%);
+	overflow: hidden;
+}
+
+.game_picture_wrapper.txf {
+	padding-bottom: calc(3 / 4 * 100%);
+}
+
+.game_title {
+	color: rgb(245, 245, 245);
+	font-size: 1.2rem;
+	word-wrap: break-word;
+	user-select: none;
+	padding: 0 6px;
+}
+
+.game_description {
+	min-height: 45px;
+	color: rgba(245, 245, 245, 0.6);
+	font-size: 1.4rem;
+	line-height: 20px;
+	min-height: 60px;
+}
+.game_title,
+.game_old_price,
+.game_new_price {
+	min-height: 20px;
+	line-height: 20px;
+	font-size: 1.4rem;
+}
+
+.game_price {
+	font-size: 1.4rem;
+	padding: 0;
+	min-height: 43px;
+}
