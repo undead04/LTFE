@@ -1,0 +1,34 @@
+.game_product_thumb {
+	display: flex;
+	align-items: center;
+	height: 73px;
+	padding: 10px 0px 10px 6px;
+	margin-right: 4px;
+	background-color: transparent;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.game_product_thumb:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	outline: none;
+}
+
+.game_product_avatar {
+	margin: 0 8px;
+	width: 40px;
+}
+
+.game_product_avatar > div {
+	height: 1px;
+	overflow: hidden;
+	padding-bottom: calc(4 / 3 * 100%);
+}
+
+.game_title {
+	color: rgb(245, 245, 245);
+	font-size: 1.2rem;
+	word-wrap: break-word;
+	user-select: none;
+	padding: 0 6px;
+}

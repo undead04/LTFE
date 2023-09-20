@@ -1,0 +1,37 @@
+/*================================== Footer =================================== */
+.footer_wrapper {
+	margin: 0 40px;
+	color: white;
+}
+
+.contact_link {
+	text-decoration: none;
+	font-size: 2.8rem;
+}
+
+.contact_link + .contact_link {
+	margin-left: 8px;
+}
+
+.contact_link:hover,
+.goup_btn:hover {
+	opacity: 0.5;
+	transition: ease-in-out 300ms;
+}
+
+.footer_link {
+	font-size: 1.6rem;
+}
+
+.footer_link:hover {
+	color: #969696 !important;
+	transition: ease 300ms;
+}
+.footer_copyright {
+	font-size: 1.2rem;
+}
+
+.goup_btn {
+	width: 35px;
+	height: 35px;
+}

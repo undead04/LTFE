@@ -1,16 +1,16 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import Header from "../containers/Header";
 import { Routes, Route } from "react-router-dom";
+import Header from "../containers/Header";
+import Footer from "../containers/Footer";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import PageNotFound from "../pages/Page-not-found";
 import Games from "../pages/Games";
 import GameDetail from "../pages/GameDetail";
-import Footer from "../containers/Footer";
 import Order from "../pages/Order";
 import Cart from "../pages/Cart";
 import User from "../pages/User";
+import NotFound from "../pages/NotFound";
 
 const DefaultLayout = () => {
 	return (
@@ -25,8 +25,8 @@ const DefaultLayout = () => {
 				<Route path="/user/:id" element={<User />} />
 				<Route path="" element={<Home />} />
 				<Route path="/home" element={<Home />} />
-				<Route path="/page-not-found" element={<PageNotFound />} />
-				<Route path="/*" element={<PageNotFound />} />
+				<Route path="/page-not-found" element={<NotFound />} />
+				<Route path="/*" element={<NotFound />} />
 			</Routes>
 			<Footer />
 		</>

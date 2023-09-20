@@ -1,0 +1,49 @@
+.search_results {
+	display: none;
+}
+
+.search_results.active {
+	position: absolute;
+	display: block;
+	top: calc(var(--search-height) + 4px);
+	right: 0;
+	bottom: 4px;
+	z-index: 3;
+}
+
+#ListGames {
+	min-width: 380px;
+	max-width: 400px;
+}
+
+.search_result_wrapper {
+	display: flex;
+	flex-direction: column;
+	max-height: 40vh;
+	overflow-y: scroll;
+}
+
+.search_result_wrapper::-webkit-scrollbar {
+	width: 2px;
+	background-color: black;
+}
+
+.search_result_wrapper::-webkit-scrollbar-thumb {
+	background-color: gray;
+	border-radius: 2px;
+}
+
+.search_result_title {
+	--search_title_height: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 4px 8px;
+	height: var(--search_title_height);
+	font-size: 1.4rem;
+	/* margin-top: var(--search-height); */
+}
+
+.search_result_title > * {
+	flex: 1;
+}
