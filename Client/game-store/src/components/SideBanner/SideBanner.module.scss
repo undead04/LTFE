@@ -1,0 +1,16 @@
+.product_wrapper {
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	max-height: 438px;
+}
+
+.product_wrapper::-webkit-scrollbar {
+	width: 5px;
+	background-color: transparent;
+}
+
+.product_wrapper::-webkit-scrollbar-thumb {
+	background-color: gray;
+	border-radius: 4px;
+}

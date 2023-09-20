@@ -3,9 +3,13 @@ import { useState, useEffect } from "react";
 import { clsx } from "clsx";
 import styles from "./Banner.module.scss";
 import { Link } from "react-router-dom";
-const Banner = () => {
+
+type BannerProps = {
+	width?: string;
+};
+const Banner: React.FC<BannerProps> = ({ width = "col-md-9" }) => {
 	return (
-		<div className={clsx("col-md-9", styles.product_banner_wrapper)}>
+		<div className={clsx(width, styles.product_banner_wrapper)}>
 			<div
 				id="carouselBanner"
 				className="carousel slide"
