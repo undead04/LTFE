@@ -68,11 +68,11 @@ class ShoppingController extends Controller
 
         unset($cart[$id]);
         Cache()->put('cart', $cart);
-        return response()->json($cart, 201);
+        return response()->json(['message' => 'Xóa sản phẩm khỏi giỏ hàng thành công'], 204);
     }
     public function purchase()
     {
-        $gameInSession = session()->get("cart");
+        $gameInSession = Cache()->get("cart");
         if ($gameInSession) {
             $userId = Auth::user()->getId();
             $order = new Order();
@@ -101,9 +101,7 @@ class ShoppingController extends Controller
             $viewData["title"] = "Purchase - Online Store";
             $viewData["subtitle"] = "Purchase Status";
             $viewData["order"] = $order;
-            return view('cart.purchase')->with("viewData", $viewData);
-        } else {
-            return redirect()->route('cart.index');
+            return response()->json($viewData, 201);
         }
     }
     public function purchaseNow($id)
