@@ -30,7 +30,7 @@ Route::prefix('/')->group(function () {
 });
 Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index');
-    Route::post('add/{id}', [ShoppingController::class, 'add'])->name('cart.add'); //
+    Route::post('add/', [ShoppingController::class, 'add'])->name('cart.add'); //
     Route::get('delete/{id}', [ShoppingController::class, 'delete'])->name('cart.delete'); //delete cart
     Route::get('purchase', [ShoppingController::class, 'purchase'])->name('cart.purchase');
     Route::post('purchaseNow/{id}', [ShoppingController::class, 'purchaseNow'])->name('cart.purchaseNow'); //mua ngay

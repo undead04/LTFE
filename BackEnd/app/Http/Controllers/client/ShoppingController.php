@@ -6,19 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\Game;
 use App\Models\GameOrder;
 use App\Models\Order;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Contracts\Service\Attribute\Required;
-
 use function PHPSTORM_META\map;
+
 
 class ShoppingController extends Controller
 {
+
+
     public function index()
     {
+
         $total = 0;
         $totalDiscount = 0;
-        $gameInSession = session()->get("cart");
+        $gameInSession = Cache()->get('cart');
+
         if ($gameInSession) {
 
             $total = array_reduce($gameInSession, function ($total, $item) {
@@ -34,10 +40,16 @@ class ShoppingController extends Controller
         $viewData["games"] = $gameInSession;
         return response()->json($viewData, 200);
     }
-    public function add($id)
+    public function add(Request $request)
     {
+        $id = $request->input('id');
         $gameItem = Game::find($id);
-        $cart = session()->get('cart', []);
+        if (!$gameItem) {
+            return response()->json([
+                'message' => 'Sản phẩm không tồn tại',
+            ], 404);
+        }
+        $cart = Cache::get('cart', []);
         $cart[$id] = [
             'id' => $gameItem->getGameId(),
             'name' => $gameItem->getNameGame(),
@@ -45,17 +57,17 @@ class ShoppingController extends Controller
             'discount' => $gameItem->getDiscount(),
             'image' => $gameItem->getImage(),
         ];
-        session()->put('cart', $cart);
-        return response()->json($cart, 201);
+        Cache::put('cart', $cart, 3600); // 1 phút
+        return response()->json([
+            'message' => 'Thêm san phẩm vào giỏ hàng thành công',
+        ], 404);
     }
     public function delete($id)
     {
-        $cart = session()->get('cart');
+        $cart = Cache()->get('cart');
 
         unset($cart[$id]);
-        session()->put('cart', $cart);
-
-
+        Cache()->put('cart', $cart);
         return response()->json($cart, 201);
     }
     public function purchase()
