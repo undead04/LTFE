@@ -10,10 +10,12 @@ use App\Models\Image;
 use App\Models\Type;
 use App\Models\Type_Game;
 use App\Models\TypeGame;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\Console\Input\Input;
 
 class GameController extends Controller
@@ -24,30 +26,34 @@ class GameController extends Controller
         $viewData['title'] = 'Admin Game Page - Store Game';
         $viewData['games'] = Game::all();
 
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
     public function create()
     {
 
-        return $viewData['typeGame'] = Type::all();
+        $viewData['typeGame'] = Type::all();
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
     public function store(Request $request)
     {
-
         $genres = $request->input('genre');
-        $request->validate([
-            'name' => 'required|max:255',
-            "description" => "required",
-            "price" => "required|numeric|gte:0",
-            "discount" => "required|numeric|gte:0|max:100",
-            'developer' => 'required',
-            'publisher' => 'required|min:5',
-            'genre' => 'required',
-            'imageMain' => 'image',
-            'imagePaner' => 'image',
-            'imageLogo' => 'image'
-        ]);
+        try {
 
+            $request->validate([
+                'name' => 'required|max:255',
+                "description" => "required",
+                "price" => "required|numeric|gte:0",
+                "discount" => "required|numeric|gte:0|max:100",
+                'developer' => 'required',
+                'publisher' => 'required|min:5',
+                'genre' => 'required',
+                'imageMain' => 'image',
+                'imagePaner' => 'image',
+                'imageLogo' => 'image'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errorCode' => 1, 'message' => $e->errors(), 'data' => ''], 422);
+        }
         $newGame = new Game();
         $newGame->setNameGame($request->input('name'));
         $newGame->setDescription($request->input('description'));
@@ -92,14 +98,14 @@ class GameController extends Controller
             $newTypeGame->setTypeId($genre);
             $newTypeGame->save();
         }
-        return response()->json(['message' => 'Thêm game thành công'], 201);
+        return response()->json(['errorCode' => 0, 'message' => 'thêm game thành công', 'data' => ''], 201);
     }
     public function delete($id)
     {
         GameOrder::where('gameid', $id)->delete();
         TypeGame::where('gameId', $id)->delete();
         Game::destroy($id);
-        return response()->json(null, 204);
+        return response()->json(['errorCode' => 0, 'message' => 'xóa game thành công', 'data' => ''], 201);
     }
     public function edit($id)
     {
@@ -109,23 +115,27 @@ class GameController extends Controller
         $viewData['game'] = Game::findOrFail($id);
         $viewData['typeGame'] = Type::all();
 
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 201);
     }
     public function update($id, Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            "description" => "required",
-            "price" => "required|numeric|gte:0",
-            "discount" => "required|numeric|gte:0|max:100",
-            'developer' => 'required',
-            'publisher' => 'required|min:5',
-            'genre' => 'required',
-            'imageMain' => 'image',
-            'imagePaner' => 'image',
-            'imageLogo' => 'image'
+        try {
+            $request->validate([
+                'name' => 'required|max:255',
+                "description" => "required",
+                "price" => "required|numeric|gte:0",
+                "discount" => "required|numeric|gte:0|max:100",
+                'developer' => 'required',
+                'publisher' => 'required|min:5',
+                'genre' => 'required',
+                'imageMain' => 'image',
+                'imagePaner' => 'image',
+                'imageLogo' => 'image'
 
-        ]);
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errorCode' => 1, 'message' => $e->errors(), 'data' => ''], 422);
+        }
         $genres = $request->input('genre');
         $oldGame = Game::find($id);
         if ($oldGame->getGenre() !== implode(',', $genres)) {
@@ -175,6 +185,6 @@ class GameController extends Controller
 
         $oldGame->save();
 
-        return response()->json(null, 204);
+        return response()->json(['errorCode' => 0, 'message' => 'update thành công', 'data' => ''], 201);
     }
 }

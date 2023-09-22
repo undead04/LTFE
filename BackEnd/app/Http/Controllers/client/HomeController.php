@@ -29,7 +29,7 @@ class HomeController extends Controller
                 'games.price',
                 'games.image',
                 'games.name_Game',
-                'games.description',
+
                 'games.discount',
                 DB::raw('sum(gameorders.quantity) as totalQuantity')
             )
@@ -38,21 +38,49 @@ class HomeController extends Controller
                 'games.price',
                 'games.image',
                 'games.name_Game',
-                'games.description',
+
                 'games.discount'
             )
             ->orderBy('totalQuantity', 'desc')
             ->take(10)->get();
-        $viewData['gameAction'] = ModelsType::where('typeNames', 'Action')->get();
-        $viewData['gameStrategy'] = ModelsType::where('typeNames', 'Strategy')->get();
-        $viewData['gameSports'] = ModelsType::where('typeNames', 'Sports')->get();
 
-        $viewData['gameAd-si-ro'] = ModelsType::where('typeNames', 'Adventure')
+        $viewData['gameAction'] = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('types.typeNames', 'Action')
+            ->distinct()
+
+            ->take('6')->get();
+        $viewData['gameStrategy'] = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('types.typeNames', 'Strategy')
+            ->distinct()
+
+            ->take('6')->get();
+        $viewData['gameSports'] = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('types.typeNames', 'Sports')
+            ->distinct()
+            ->take('6')->get();
+
+        $viewData['gameAd-si-ro'] = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('typeNames', 'Adventure')
             ->orWhere('typeNames', 'Role-playing')
-            ->orWhere('typeNames', 'Simulation')->get();
-        $viewData['gameMM-Ca-Ho'] = ModelsType::where('typeNames', 'MMO')
+            ->orWhere('typeNames', 'Simulation')
+            ->distinct()
+            ->take('6')->get();
+        $viewData['gameMM-Ca-Ho'] = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('typeNames', 'MMO')
             ->orWhere('typeNames', 'Card Game')
-            ->orWhere('typeNames', 'Horror')->get();
-        return response()->json($viewData, 200);
+            ->orWhere('typeNames', 'Horror')
+            ->distinct()
+            ->take('6')->get();
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 }

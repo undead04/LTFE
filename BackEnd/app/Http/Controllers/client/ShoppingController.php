@@ -40,14 +40,12 @@ class ShoppingController extends Controller
         $viewData["games"] = $gameInSession;
         return response()->json($viewData, 200);
     }
-    public function add(Request $request)
+    public function add($id)
     {
-        $id = $request->input('id');
+
         $gameItem = Game::find($id);
         if (!$gameItem) {
-            return response()->json([
-                'message' => 'Sản phẩm không tồn tại',
-            ], 404);
+            return response()->json(['errorCode' => 1, 'message' => 'Không tìm thấy sản phẩm', 'data' => ''], 401);
         }
         $cart = Cache::get('cart', []);
         $cart[$id] = [
@@ -58,17 +56,18 @@ class ShoppingController extends Controller
             'image' => $gameItem->getImage(),
         ];
         Cache::put('cart', $cart, 3600); // 1 phút
-        return response()->json([
-            'message' => 'Thêm san phẩm vào giỏ hàng thành công',
-        ], 404);
+        return response()->json(['errorCode' => 0, 'message' => 'Đã thêm sản phẩm vào giỏ hàng', 'data' => ''], 201);
     }
     public function delete($id)
     {
         $cart = Cache()->get('cart');
 
+        if (!array_key_exists($id, $cart)) {
+            return response()->json(['errorCode' => 1, 'message' => 'không tìm thấy sản phẩm', 'data' => ''], 401);
+        }
         unset($cart[$id]);
         Cache()->put('cart', $cart);
-        return response()->json(['message' => 'Xóa sản phẩm khỏi giỏ hàng thành công'], 204);
+        return response()->json(['errorCode' => 0, 'message' => 'xóa sản phẩm thành công', 'data' => ''], 200);
     }
     public function purchase()
     {

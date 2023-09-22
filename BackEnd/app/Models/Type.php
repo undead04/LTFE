@@ -9,6 +9,8 @@ class Type extends Model
 {
     use HasFactory;
     protected $table = 'types';
+    public $timestamps = false;
+
     public function getTypeId()
     {
         return $this->attributes['id'];
