@@ -31,7 +31,7 @@ class HomeController extends Controller
         }
 
         $viewData['total'] = $total;
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 
     public function user()
@@ -40,6 +40,6 @@ class HomeController extends Controller
         $viewData['users'] = DB::table('users')->get();
         // dd($viewData['users']);
 
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 }

@@ -61,5 +61,5 @@ Route::prefix('admin')->group(function () {
     Route::get('genres/edit/{id}', [GenresController::class, 'edit'])->name('admin.genre.edit'); //trang sữa thể loại
     Route::put('genres/update/{id}', [GenresController::class, 'update'])->name('admin.genre.update'); //update thể loại
     Route::delete('/genres/delete/{id}', [GenresController::class, 'delete'])->name('admin.genre.delete'); //xóa thể loại
-    Route::get('/profit', [ProfitController::class, 'index'])->name('admin.profit.index'); //trang profit
+    Route::get('/profile', [ProfitController::class, 'index'])->name('admin.profit.index'); //trang profit
 });

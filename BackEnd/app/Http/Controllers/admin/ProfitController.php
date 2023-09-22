@@ -29,6 +29,6 @@ class ProfitController extends Controller
 
         $viewData['games'] = $games;
         // dd($viewData['games']);
-        return view('admin.profit.index', ['viewData' => $viewData]);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 }
