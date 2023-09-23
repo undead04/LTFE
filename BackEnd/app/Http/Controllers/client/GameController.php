@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Game;
 use App\Models\Type;
 use App\Models\Type_Game;
+use App\Models\TypeGame;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -15,8 +16,9 @@ class GameController extends Controller
         $viewData = [];
         $viewData['game'] = Game::find($id);
         $viewData['title'] = $viewData['game']->getNameGame() . ' | Details';
-        $viewData['type'] = Type::find($viewData['game']->getGenre());
-        return response()->json($viewData, 200);
+        $viewData['type'] = TypeGame::where('gameId', $viewData['game']->getGameId())->get();
+
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 
     public function allGames()
@@ -26,7 +28,7 @@ class GameController extends Controller
         $viewData['games'] = Game::all();
         $viewData['type'] = Type::all();
         $viewData['oldCheck'] = [];
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
     public function viewMore($type)
     {
@@ -35,6 +37,6 @@ class GameController extends Controller
             ->first();
 
         $viewData['title'] = $viewData['type']->getTypeGame() . ' | viewMore';
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
 }

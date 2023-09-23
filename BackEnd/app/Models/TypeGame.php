@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class TypeGame extends Model
 {
     use HasFactory;
+    protected $table = 'typeGames';
+    public $timestamps = false;
     public function getGameId()
     {
         return $this->attributes['gameId'];
