@@ -12,19 +12,30 @@ interface searchProps
 	placeholder?: string;
 	id?: string;
 	name?: string;
+	range?: string;
 }
-const SearchInput: FC<searchProps> = ({
+const SearchInput = ({
 	placeholder,
 	id,
 	name,
+	range = "d-none d-md-flex",
+	children,
 	...others
-}) => {
+}: React.PropsWithChildren<searchProps>) => {
 	const [active, setActive] = useState(false);
 	const [value, setValue] = useState("");
 	useEffect(() => {}, [active]);
 	return (
-		<div className={clsx(styles.search_area, styles.headnav_item)}>
-			<div className={clsx(styles.headnav_search, "form-group")}>
+		<div
+			className={clsx(
+				styles.search_area,
+				styles.headnav_item,
+				"position-relative",
+			)}
+		>
+			<div
+				className={clsx(styles.headnav_search, "form-group", range)}
+			>
 				<span>
 					<i className="fa-solid fa-magnifying-glass" />
 				</span>
@@ -39,7 +50,7 @@ const SearchInput: FC<searchProps> = ({
 					{...others}
 				/>
 			</div>
-			<SearchResult />
+			{active ? children : ""}
 		</div>
 	);
 };

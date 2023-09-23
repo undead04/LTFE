@@ -21,13 +21,19 @@ const GameCard: React.FC<GameCardProps> = ({
 	title,
 	price,
 	discount,
-	size = "6:2-4",
+	size = "6:4:2-4",
 	color = "dark",
 	description,
 }) => {
 	const sizeArray = size.split(":");
+	const priceFormat = new Intl.NumberFormat("vi-VN", {
+		style: "currency",
+		currency: "VND",
+	});
 	return (
-		<div className={`col-${sizeArray[0]} col-md-${sizeArray[1]}`}>
+		<div
+			className={`col-${sizeArray[0]} col-md-${sizeArray[1]} col-md-${sizeArray[2]}`}
+		>
 			<div>
 				<Link to={`/games/${id}`}>
 					<div className={clsx(`card bg-${color}`)}>
@@ -89,7 +95,7 @@ const GameCard: React.FC<GameCardProps> = ({
 														"text-light",
 													)}
 												>
-													<span>{price}</span>
+													<span>{priceFormat.format(price)}</span>
 												</div>
 											</>
 										) : (
@@ -99,7 +105,7 @@ const GameCard: React.FC<GameCardProps> = ({
 														[styles.isDiscount]: !discount,
 													})}
 												>
-													{discount}
+													-{discount}%
 												</div>
 												<div className={clsx("game_price")}>
 													<div
@@ -108,11 +114,13 @@ const GameCard: React.FC<GameCardProps> = ({
 															"text-decoration-line-through text-secondary",
 														)}
 													>
-														<span>{price}</span>
+														<span>{priceFormat.format(price)}</span>
 													</div>
 													<div className="text-light game_new_price">
 														<span>
-															{price * (1 - discount / 100)}
+															{priceFormat.format(
+																price * (1 - discount / 100),
+															)}
 														</span>
 													</div>
 												</div>

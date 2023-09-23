@@ -33,7 +33,16 @@
 }
 
 .nav_options span {
+	display: flex;
+	align-items: center;
+	min-height: 40px;
+	flex: 1;
 	font-size: 1.6rem;
+
+	i {
+		min-width: 30px;
+		margin-left: auto;
+	}
 }
 
 .brand_img {

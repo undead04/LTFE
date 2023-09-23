@@ -5,6 +5,7 @@ import Header from "../containers/Header";
 import Footer from "../containers/Footer";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Register from "../pages/Register";
 import Games from "../pages/Games";
 import GameDetail from "../pages/GameDetail";
 import Order from "../pages/Order";
@@ -18,6 +19,7 @@ const DefaultLayout = () => {
 			<Header />
 			<Routes>
 				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
 				<Route path="/games" element={<Games />} />
 				<Route path="/games/:id" element={<GameDetail />} />
 				<Route path="/order" element={<Order />} />

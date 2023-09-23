@@ -1,0 +1,15 @@
+.game_details_tag {
+	max-width: 50%;
+	border-left: 4px solid #fff;
+	padding: 0 12px;
+
+	a {
+		color: #fff;
+		font-size: 1.2rem;
+		text-decoration: underline;
+
+		& + a {
+			margin-left: 4px;
+		}
+	}
+}

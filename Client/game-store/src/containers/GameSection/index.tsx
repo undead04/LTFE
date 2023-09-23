@@ -3,16 +3,20 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 type GameSectionProps = {
-	title: string;
+	title?: string;
 	children: React.PropsWithChildren;
 	isScroll?: boolean;
 	viewMore?: boolean;
+	size?: number;
+	color?: string;
 };
 const GameSection = ({
 	title,
 	children,
-	isScroll,
+	isScroll = false,
 	viewMore,
+	size = 0,
+	color = "transparent",
 }: React.PropsWithChildren<GameSectionProps>) => {
 	const xSlideDOM = document.querySelector(".carousel_multiple");
 	if (xSlideDOM !== null && isScroll) {
@@ -31,12 +35,16 @@ const GameSection = ({
 		}
 	}
 	return (
-		<section className="py-5 bg-black">
+		<section className={clsx("py-5", ` bg-${color} col-md-${size}`)}>
 			<div className="container-md">
 				<div className="d-flex justify-content-between align-items-center">
-					<Link to={"/"}>
-						<h2 className="text-white my-3">{title}</h2>
-					</Link>
+					{title ? (
+						<Link to={"/"}>
+							<h2 className="text-white my-3">{title}</h2>
+						</Link>
+					) : (
+						""
+					)}
 					{viewMore ? (
 						<a
 							className="btn btn-outline-secondary text-uppercase text-light px-5 py-3"
@@ -49,9 +57,9 @@ const GameSection = ({
 					)}
 				</div>
 				<div
-					className={clsx(
-						"row flex-nowrap overflow-x-scroll carousel_multiple",
-					)}
+					className={clsx("row g-0 g-md-2", {
+						"flex-nowrap overflow-x-scroll carousel_multiple": !size,
+					})}
 				>
 					{children}
 				</div>

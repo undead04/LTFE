@@ -6,13 +6,14 @@
 	position: absolute;
 	display: block;
 	top: calc(var(--search-height) + 4px);
+	left: 0;
 	right: 0;
 	bottom: 4px;
 	z-index: 3;
 }
 
 #ListGames {
-	min-width: 380px;
+	// min-width: 380px;
 	max-width: 400px;
 }
 

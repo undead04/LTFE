@@ -8,6 +8,14 @@ import GameSection from "../../containers/GameSection";
 import GameCard from "../../components/GameCard";
 
 const Home = () => {
+	useEffect(() => {
+		// const fetchData = async () => {
+		// 	const response = await fetch("http://localhost:8000/api/home");
+		// 	const data = await response.json();
+		// 	document.title = data.title;
+		// };
+		// fetchData();
+	}, []);
 	return (
 		<>
 			<section className="bg-black">
@@ -116,8 +124,8 @@ const Home = () => {
 							<GameCard
 								id={3}
 								title="Game EA ESPORT VN 2023"
-								price={10000}
-								discount={0}
+								price={0}
+								discount={10}
 								size="6:4"
 								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
 								color="black"
@@ -130,7 +138,7 @@ const Home = () => {
 								id={3}
 								title="Game EA ESPORT VN 2023"
 								price={10000}
-								discount={0}
+								discount={10}
 								size="6:4"
 								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
 								color="black"
@@ -149,6 +157,85 @@ const Home = () => {
 								most true-to-football experience ever with
 								HyperMotionV, PlayStyles optimised by Opta, and a
 								revolutionised Frostbite™ Engine."
+							/>
+						</GameSection>
+
+						<GameSection title="Adventure" viewMore size={4}>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={0}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={0}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+						</GameSection>
+						<GameSection title="Action" viewMore size={4}>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={0}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={0}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+						</GameSection>
+						<GameSection title="Simulation" viewMore size={4}>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={10000}
+								discount={0}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
+							/>
+							<GameThumb
+								showPrice={true}
+								price={0}
+								discount={10}
+								imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
+								id={1}
+								title="EA ESPORT CHAMPION"
 							/>
 						</GameSection>
 					</div>

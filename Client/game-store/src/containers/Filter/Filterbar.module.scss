@@ -1,0 +1,45 @@
+.filter_header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 54px;
+	font-size: 1.6rem;
+}
+
+.filter_search {
+	height: 40px;
+	font-size: 1.4rem;
+	border-radius: 4px;
+	background-color: #666;
+}
+
+.filter_search > div {
+	display: flex;
+	align-items: center;
+}
+.filter_search span {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	width: 40px;
+}
+
+.filter_search input {
+	flex: 1;
+	height: 40px;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	background-color: #666;
+	color: white;
+}
+
+.filter_search input:hover {
+	border: none;
+	outline: none;
+}
+
+.filter_genre {
+	display: flex;
+}
