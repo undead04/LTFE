@@ -13,30 +13,54 @@ class GameController extends Controller
 {
     public function detail($id)
     {
-        $viewData = [];
-        $viewData['game'] = Game::find($id);
-        $viewData['title'] = $viewData['game']->getNameGame() . ' | Details';
-        $viewData['type'] = TypeGame::where('gameId', $viewData['game']->getGameId())->get();
 
-        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
+        $game = Game::Find($id);
+        if (!$game) {
+            return response()->json([
+                'errorCode' => 1,
+                'message' => 'không tìm thấy sản phẩm',
+                'data' => ''
+            ], 401);
+        }
+        $title = $game->getNameGame() . ' | Details';
+        $type = TypeGame::where('gameId', $game->getGameId())->get();
+        foreach ($type as $item) {
+            $typeName[] = $item->type->getTypeGame();
+        }
+        return response()->json([
+            'errorCode' => 0, 'message' => '', 'data' => [
+                'game' => $game,
+                'title' => $title,
+                'type' => $typeName
+            ]
+        ], 200);
     }
 
     public function allGames()
     {
-        $viewData = [];
-        $viewData['title'] = 'Game Store 3' . ' | All games';
-        $viewData['games'] = Game::all();
-        $viewData['type'] = Type::all();
-        $viewData['oldCheck'] = [];
-        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
+
+        $title = 'Game Store 3' . ' | All games';
+        $games = Game::select('id', 'name_Game', 'image', 'discount', 'price')->get();
+
+        $type = Type::all();
+        $oldCheck = [];
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
+            'title' => $title,
+            'games' => $games,
+            'type' => $type,
+            'oldCheck' => $oldCheck
+        ]], 200);
     }
     public function viewMore($type)
     {
-        $viewData = [];
-        $viewData['type'] = Type::where('typeNames', $type)->select('id', 'typeNames')
+
+        $type = Type::where('typeNames', $type)->select('id', 'typeNames')
             ->first();
 
-        $viewData['title'] = $viewData['type']->getTypeGame() . ' | viewMore';
-        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
+        $title = $type->getTypeGame() . ' | viewMore';
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
+            'title' => $title,
+            'type' => $type
+        ]], 200);
     }
 }

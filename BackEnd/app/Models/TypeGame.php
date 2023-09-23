@@ -28,6 +28,7 @@ class TypeGame extends Model
     }
     public function games()
     {
+        dd('adsfs');
         return $this->belongsTo(Game::class, 'gameId');
     }
     public function type()

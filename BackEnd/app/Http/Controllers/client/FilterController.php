@@ -63,6 +63,6 @@ class FilterController extends Controller
         // $viewData['type'] = TypeGame::all();
         $request->flash();
         // $filterItems = [];
-        return view("clients.games")->with('viewData', $viewData);
+
     }
 }
