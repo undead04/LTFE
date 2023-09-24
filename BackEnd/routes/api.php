@@ -11,11 +11,12 @@ use App\Http\Controllers\admin\GenresController;
 use App\Http\Controllers\admin\HomeController as AdminHomeController;
 use App\Http\Controllers\admin\ProfitController;
 use App\Http\Controllers\client\FilterController;
+use App\Http\Controllers\client\LoginController;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\TextUI\XmlConfiguration\Group;
 use App\Http\Controllers\client\ShoppingController;
 use App\Http\Controllers\client\MyAcountController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\client\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,9 +28,7 @@ use App\Http\Controllers\SearchController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 Route::prefix('games')->group(function () {
     Route::get('/', [ClientGameController::class, 'allGames'])->name('clients.games'); //lấy tất cả game
     Route::get('/{id}', [ClientGameController::class, 'detail'])->name('clients.gamesDetail'); //chọn game chi tiết
@@ -37,6 +36,8 @@ Route::prefix('games')->group(function () {
 });
 Route::prefix('/')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('clients.home'); //trang home
+    Route::get('search', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
+    Route::post('/register', [LoginController::class, 'register']);
 });
 Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index'); //san phẩm trong cart
