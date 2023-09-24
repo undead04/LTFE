@@ -36,10 +36,12 @@ class HomeController extends Controller
 
     public function user()
     {
-        $viewData = [];
-        $viewData['users'] = DB::table('users')->get();
+
+        $users = DB::table('users')->get();
         // dd($viewData['users']);
 
-        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
+            'users' => $users
+        ]], 200);
     }
 }

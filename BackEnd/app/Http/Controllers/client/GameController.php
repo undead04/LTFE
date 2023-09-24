@@ -53,17 +53,22 @@ class GameController extends Controller
     }
     public function viewMore($type)
     {
-        $game = [];
-        $type = Type::where('typeNames', $type)
-            ->first();
-        foreach ($type->typeGame as $typeGame) {
-            $game[] = $typeGame->games->select('id', 'name_Game', 'image', 'discount')->get();
-        }
 
-        $title = $type->getTypeGame() . ' | viewMore';
+        $typeName = Type::where('typeNames', $type)
+            ->first();
+
+        $game = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
+            ->join('types', 'typegames.typeId', '=', 'types.id')
+            ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
+            ->where('types.typeNames', $type)
+            ->distinct()
+            ->get();
+
+        $title = $typeName->getTypeGame() . ' | viewMore';
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
             'title' => $title,
-            'game' => $game
+            'game' => $game,
+            'type' => $typeName->getTypeGame()
         ]], 200);
     }
 }
