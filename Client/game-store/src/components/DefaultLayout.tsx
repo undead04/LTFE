@@ -12,6 +12,7 @@ import Order from "../pages/Order";
 import Cart from "../pages/Cart";
 import User from "../pages/User";
 import NotFound from "../pages/NotFound";
+import ViewMore from "../pages/ViewMore";
 
 const DefaultLayout = () => {
 	return (
@@ -26,6 +27,7 @@ const DefaultLayout = () => {
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/user/:id" element={<User />} />
 				<Route path="" element={<Home />} />
+				<Route path="/viewMore/:genre" element={<ViewMore />} />
 				<Route path="/home" element={<Home />} />
 				<Route path="/page-not-found" element={<NotFound />} />
 				<Route path="/*" element={<NotFound />} />

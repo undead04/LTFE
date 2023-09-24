@@ -12,6 +12,9 @@ const list = () => {
 		.then((res) => res.data);
 };
 
+const get = (genre: string) {
+	return api.get<ResponseWrapper<>>
+}
 const genreSerive = {
 	list,
 };

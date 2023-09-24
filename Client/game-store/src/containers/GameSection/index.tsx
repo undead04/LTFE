@@ -23,13 +23,12 @@ const GameSection = ({
 		if (xSlideDOM.clientWidth > 500) {
 			const maxScollX = xSlideDOM.scrollWidth - xSlideDOM.clientWidth;
 			setInterval(() => {
-				xSlideDOM.scrollLeft +=
-					xSlideDOM.scrollLeft + xSlideDOM.scrollWidth * 0.2;
-				if (xSlideDOM.scrollLeft === maxScollX) {
+				xSlideDOM.scrollLeft += xSlideDOM.scrollWidth * 0.2;
+				if (xSlideDOM.scrollLeft >= maxScollX + 10) {
 					const timeOutId = setTimeout(() => {
 						xSlideDOM.scrollLeft = 0;
 						clearTimeout(timeOutId);
-					}, 1000);
+					}, 3000);
 				}
 			}, 3000);
 		}
@@ -40,18 +39,20 @@ const GameSection = ({
 				<div className="d-flex justify-content-between align-items-center">
 					{title ? (
 						<Link to={"/"}>
-							<h2 className="text-white my-3">{title}</h2>
+							<h2 className="text-white my-3 text-capitalize">
+								{title}
+							</h2>
 						</Link>
 					) : (
 						""
 					)}
 					{viewMore ? (
-						<a
+						<Link
 							className="btn btn-outline-secondary text-uppercase text-light px-5 py-3"
-							href="/"
+							to={`/viewMore/${title}`}
 						>
 							view More
-						</a>
+						</Link>
 					) : (
 						""
 					)}
