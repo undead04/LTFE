@@ -38,6 +38,7 @@ Route::prefix('/')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('clients.home'); //trang home
     Route::get('search', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
     Route::post('/register', [LoginController::class, 'register']);
+    Route::post('/login', [LoginController::class, 'login']);
 });
 Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index'); //san phẩm trong cart
