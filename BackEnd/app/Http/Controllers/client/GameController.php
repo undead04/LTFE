@@ -53,14 +53,17 @@ class GameController extends Controller
     }
     public function viewMore($type)
     {
-
-        $type = Type::where('typeNames', $type)->select('id', 'typeNames')
+        $game = [];
+        $type = Type::where('typeNames', $type)
             ->first();
+        foreach ($type->typeGame as $typeGame) {
+            $game[] = $typeGame->games->select('id', 'name_Game', 'image', 'discount')->get();
+        }
 
         $title = $type->getTypeGame() . ' | viewMore';
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
             'title' => $title,
-            'type' => $type
+            'game' => $game
         ]], 200);
     }
 }

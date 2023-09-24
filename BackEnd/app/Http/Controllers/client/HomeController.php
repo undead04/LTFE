@@ -23,31 +23,31 @@ class HomeController extends Controller
         $title = 'Home page | Web game store';
         $paner = Game::query()->orderBy('price', 'desc')->select('id', 'price', 'image', 'name_Game', 'discount', 'description')->take(6)->get();
 
-            $bestSaler = Game::join('gameorders', 'games.id', '=', 'gameorders.gameId')
-                ->select(
-                    'games.id',
-                    'games.price',
-                    'games.image',
-                    'games.name_Game',
-                    'games.discount',
-                    DB::raw('sum(gameorders.quantity) as totalQuantity')
-                )
-                ->groupBy(
-                    'games.id',
-                    'games.price',
-                    'games.image',
-                    'games.name_Game',
-                    'games.discount'
-                )
-                ->orderBy('totalQuantity', 'desc')
-                ->take(10)->get();
+        $bestSaler = Game::join('gameorders', 'games.id', '=', 'gameorders.gameId')
+            ->select(
+                'games.id',
+                'games.price',
+                'games.image',
+                'games.name_Game',
+                'games.discount',
+                DB::raw('sum(gameorders.quantity) as totalQuantity')
+            )
+            ->groupBy(
+                'games.id',
+                'games.price',
+                'games.image',
+                'games.name_Game',
+                'games.discount'
+            )
+            ->orderBy('totalQuantity', 'desc')
+            ->take(10)->get();
 
         $gameAction = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
             ->join('types', 'typegames.typeId', '=', 'types.id')
             ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
             ->where('types.typeNames', 'Action')
             ->distinct()
-            ->take('3')->get();
+            ->take('6')->get();
         $gameStrategy = Game::query()->join('typegames', 'games.id', '=', 'typegames.gameId')
             ->join('types', 'typegames.typeId', '=', 'types.id')
             ->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')
