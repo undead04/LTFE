@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import styles from "./Collapse.module.scss";
 
 type CollapseItemProps = {
-	id: string;
+	id: number;
 	name: string;
 	value: string;
 };
@@ -33,6 +33,7 @@ const CollapseItem = ({ id, name, value }: CollapseItemProps) => {
 					value={id}
 					hidden
 					checked={check}
+					onChange={() => setCheck(!check)}
 					// hidden
 					id={"filter-" + id}
 				/>

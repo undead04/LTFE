@@ -6,8 +6,13 @@ import SideBanner from "../../components/SideBanner";
 import GameThumb from "./../../components/GameThumb/index";
 import GameSection from "../../containers/GameSection";
 import GameCard from "../../components/GameCard";
+import gameService, { IGame } from "../../services/gameService";
 
 const Home = () => {
+	const [banner, setBanner] = useState<IGame[]>([]);
+	const loadData = () => {
+		gameService.home().then((res) => setBanner(res.data.paner));
+	};
 	useEffect(() => {
 		// const fetchData = async () => {
 		// 	const response = await fetch("http://localhost:8000/api/home");
@@ -15,13 +20,14 @@ const Home = () => {
 		// 	document.title = data.title;
 		// };
 		// fetchData();
+		loadData();
 	}, []);
 	return (
 		<>
 			<section className="bg-black">
 				<div className="container-md">
 					<div className={clsx("row align-content center")}>
-						<Banner />
+						<Banner id="banner_carousel" data={banner} />
 						<SideBanner>
 							<GameThumb
 								id={1}

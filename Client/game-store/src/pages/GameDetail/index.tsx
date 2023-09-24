@@ -5,6 +5,11 @@ import Image from "../../components/Image";
 import clsx from "clsx";
 import styles from "./GameDetail.module.scss";
 import Button from "../../components/Button";
+import gameService, {
+	IGame,
+	gameInfo,
+	gameSingInfo,
+} from "../../services/gameService";
 
 // type GameDetailProps = {
 // 	title: string;
@@ -20,18 +25,20 @@ import Button from "../../components/Button";
 const GameDetail = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
-
+	const [game, setGame] = useState<IGame>();
+	const loadData = () => {
+		gameService.get(Number(id)).then((res) => setGame(res.data.game));
+	};
 	useEffect(() => {
 		if (!/\d+/.test(id as string)) {
 			navigate("/page-not-found");
 		}
+		loadData();
 	}, [id, navigate]);
 
-	useEffect(() => {
-		// Call APT
-	}, []);
-	let price = 10000;
-	let discount = 10;
+	console.log(game);
+	let price = game?.price || 0;
+	let discount = game?.discount || 0;
 
 	const priceFormat = new Intl.NumberFormat("vi-VN", {
 		style: "currency",
@@ -45,13 +52,13 @@ const GameDetail = () => {
 					<div className="row">
 						<div className="col-12 col-md-5 col-lg-7">
 							<div className="display-3 text-light py-2 fw-normal text-nowrap truncated">
-								EA ESPORT SOCCER VN 2023
+								{game?.name_Game}
 							</div>
 							<span className="text-light display-6 fw-normal border-bottom d-inline-block mb-2 border-2">
 								Overview
 							</span>
 							<div className="mb-2 mb-md-5">
-								<Image src="http://localhost:8000/storage/65092548f3597.png" />
+								<Image src={game?.image} />
 							</div>
 							<div className="text-light mb-0 mb-md-3 fw-semibold fs-primary">
 								Description
@@ -77,11 +84,7 @@ const GameDetail = () => {
 									</div>
 									<div className="box-body">
 										<div className="box-description">
-											<p>
-												The best way to consume React-Bootstrap is via
-												the npm package which you can install with npm
-												(or yarn if you prefer).
-											</p>
+											<p>{game?.description}</p>
 										</div>
 									</div>
 								</div>
