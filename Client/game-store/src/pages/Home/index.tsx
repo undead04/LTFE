@@ -9,6 +9,7 @@ import GameCard from "../../components/GameCard";
 import gameService, { IGame } from "../../services/gameService";
 
 const Home = () => {
+	// Lấy banner
 	const [banner, setBanner] = useState<IGame[]>([]);
 	const [topsaler, setTopsaler] = useState<IGame[]>([]);
 
@@ -38,7 +39,7 @@ const Home = () => {
 		// };
 		// fetchData();
 		loadData();
-		console.log("Call API");
+		// console.log("Call API");
 	}, []);
 	return (
 		<>

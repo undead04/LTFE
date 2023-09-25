@@ -8,6 +8,11 @@ export interface IGame {
 	image: string;
 	price: number;
 	description: string;
+	developer?: string;
+	publisher?: string;
+	created_at?: Date;
+	"image-paner"?: string;
+	"image-logo"?: string;
 }
 export type gameInfo<T> = {
 	title: string;
@@ -40,6 +45,7 @@ export type homePageInfo<T> = {
 export type gameSingInfo<T> = {
 	title: string;
 	game: T;
+	type?: Array<String>;
 };
 
 export type genreListProps = {

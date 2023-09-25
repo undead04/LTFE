@@ -1,15 +1,10 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Image from "../../components/Image";
 import clsx from "clsx";
 import styles from "./GameDetail.module.scss";
-import Button from "../../components/Button";
-import gameService, {
-	IGame,
-	gameInfo,
-	gameSingInfo,
-} from "../../services/gameService";
+import gameService, { IGame } from "../../services/gameService";
 
 // type GameDetailProps = {
 // 	title: string;
@@ -26,17 +21,23 @@ const GameDetail = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const [game, setGame] = useState<IGame>();
+	const [genre, setGenre] = useState<Array<String>>([]);
 	const loadData = () => {
-		gameService.get(Number(id)).then((res) => setGame(res.data.game));
+		gameService.get(Number(id)).then((res) => {
+			setGame(res.data.game);
+			if (res.data.type) {
+				setGenre(res.data.type);
+			}
+		});
 	};
 	useEffect(() => {
 		if (!/\d+/.test(id as string)) {
 			navigate("/page-not-found");
 		}
 		loadData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, navigate]);
 
-	console.log(game);
 	let price = game?.price || 0;
 	let discount = game?.discount || 0;
 
@@ -58,7 +59,7 @@ const GameDetail = () => {
 								Overview
 							</span>
 							<div className="mb-2 mb-md-5">
-								<Image src={game?.image} />
+								<Image src={game?.["image-paner"]} />
 							</div>
 							<div className="text-light mb-0 mb-md-3 fw-semibold fs-primary">
 								Description
@@ -68,13 +69,22 @@ const GameDetail = () => {
 									<div className="text-secondary fw-semibold fs-secondary">
 										Genres
 									</div>
+									{genre.map((item, index) => (
+										<Link
+											key={index}
+											to={`/viewMore/${item}`}
+											className="text-capitalize"
+										>
+											{item}
+										</Link>
+									))}
 								</div>
 							</div>
 
 							<div className="box mt-3 mt-md-5">
 								<div className="box-heading">
 									<div className="text-light mb-0 mb-md-3 fw-semibold fs-primary">
-										EA ESPORT VN PLUS SOCCER
+										{game?.name_Game}
 									</div>
 									<div className="box-body">
 										<div className="box-description">
@@ -87,7 +97,7 @@ const GameDetail = () => {
 
 						<div className="col-12 offset-md-1 col-md-6 offset-lg-1 col-lg-4 text-center">
 							<div className="">
-								<Image src="http://localhost:8000/storage/650922e5c4906.webp" />
+								<Image src={game?.["image-logo"]} />
 								<div className="mt-4 align-items-center  d-flex">
 									<div className="badge bg-secondary small p-3">
 										BASE GAME
@@ -159,15 +169,23 @@ const GameDetail = () => {
 									</li>
 									<li className="fs-secondary text-light d-flex justify-content-between p-3">
 										<span>Developer</span>
-										<span>EA Canada</span>
+										<span>{game?.developer}</span>
 									</li>
 									<li className="fs-secondary text-light d-flex justify-content-between p-3">
 										<span>Publisher</span>
-										<span>Electronic Arts</span>
+										<span>{game?.publisher}</span>
 									</li>
 									<li className="fs-secondary text-light d-flex justify-content-between p-3">
 										<span>Realease Date</span>
-										<span>2023-09-19 04:26:13</span>
+										<span>
+											{game?.created_at ? (
+												<>
+													{new Date(game?.created_at).toDateString()}
+												</>
+											) : (
+												""
+											)}
+										</span>
 									</li>
 									<li className="fs-secondary text-light d-flex justify-content-between p-3">
 										<span>Platform</span>
