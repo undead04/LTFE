@@ -32,6 +32,7 @@ const input: FC<Props> = ({
         <div className="flex-grow-1">
           {row > 0 ? (
             <textarea
+              {...(other as TextareaHTMLAttributes<HTMLTextAreaElement>)}
               rows={row}
               name={name}
               className="form-control bg-transparent text-primary"

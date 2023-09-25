@@ -30,14 +30,11 @@ const Benefit = () => {
                     </thead>
                     <tbody className="table-group-divider">
                       <tr>
-                        <th colSpan={4}>Chưa có dữ liệu</th>
-                      </tr>
-                      <tr>
                         <th scope="row"></th>
                         <td>
                           <a
                             className="text-primary text-decoration-underline"
-                            href="}"
+                            href=""
                           />
                         </td>
                         <td className="text-success">+₫</td>

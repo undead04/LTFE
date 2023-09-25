@@ -22,16 +22,14 @@ class GenresController extends Controller
     }
     public function addGenres(Request $request)
     {
-        try {
-            $request->validate([
-                'typeName' => 'required|max:100',
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json(['errorCode' => 1, 'message' => $e->errors(), 'data' => ''], 422);
-        }
+
+        $request->validate([
+            'typeNames' => 'required|max:100',
+        ]);
+
         // $viewData['typeNames'] = 
         $newType = new Type();
-        $newType->setTypeGame($request->input('typeName'));
+        $newType->setTypeGame($request->input('typeNames'));
         $newType->save();
 
         return response()->json(['errorCode' => 0, 'message' => 'Thêm loại thành công', 'data' => ''], 201);
@@ -41,20 +39,18 @@ class GenresController extends Controller
         $viewData = [];
 
         $viewData['title'] = 'Admin Edit Type Page';
-        $viewData['genre'] = Type::findOrFail($id);
+        $viewData['genres'] = Type::findOrFail($id);
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
     public function update($id, Request $request)
     {
-        try {
-            $request->validate([
-                'typeName' => 'required|max:255'
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json(['errorCode' => 1, 'message' => $e->errors(), 'data' => ''], 422);
-        }
+
+        $request->validate([
+            'typeNames' => 'required|max:255'
+        ]);
+
         $oldGame = Type::find($id);
-        $oldGame->setTypeGame($request->input('typeName'));
+        $oldGame->setTypeGame($request->input('typeNames'));
         $oldGame->save();
         return response()->json(['errorCode' => 0, 'message' => 'update loại thành công', 'data' => ''], 201);
     }

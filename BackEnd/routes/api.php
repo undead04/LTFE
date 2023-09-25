@@ -58,7 +58,7 @@ Route::prefix('admin')->group(function () {
     Route::put('game/update/{id}', [GameController::class, 'update'])->name('admin.game.update'); //edit game
     Route::get('game/create', [GameController::class, 'create'])->name('admin.game.create'); //trang tạo game
     Route::get('genre', [GenresController::class, 'index'])->name('admin.genre.genres'); //trang chứa bản thể loại
-    Route::post('genres/store', [GenresController::class, 'addGenres'])->name('admin.genres.store'); //trang thêm thể loại
+    Route::post('genre/store', [GenresController::class, 'addGenres'])->name('admin.genres.store'); //trang thêm thể loại
     Route::get('genre/create', [GenresController::class, 'create'])->name('admin.genre.create'); //trang input thêm thể loại
     Route::get('genre/edit/{id}', [GenresController::class, 'edit'])->name('admin.genre.edit'); //trang sữa thể loại
     Route::put('genre/update/{id}', [GenresController::class, 'update'])->name('admin.genre.update'); //update thể loại

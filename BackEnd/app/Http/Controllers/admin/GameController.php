@@ -25,37 +25,28 @@ class GameController extends Controller
         $viewData = [];
         $viewData['title'] = 'Admin Game Page - Store Game';
         $viewData['games'] = Game::all();
-
-        return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
-    }
-    public function create()
-    {
-
         $viewData['typeGame'] = Type::all();
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 200);
     }
+
     public function store(Request $request)
     {
         $genres = $request->input('genre');
-        try {
 
-            $request->validate([
-                'name' => 'required|max:255',
-                "description" => "required",
-                "price" => "required|numeric|gte:0",
-                "discount" => "required|numeric|gte:0|max:100",
-                'developer' => 'required',
-                'publisher' => 'required|min:5',
-                'genre' => 'required',
-                'imageMain' => 'image',
-                'imagePaner' => 'image',
-                'imageLogo' => 'image'
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json(['errorCode' => 1, 'message' => $e->errors(), 'data' => ''], 422);
-        }
+
+        $request->validate([
+            'name_Game' => 'required|max:255',
+            "description" => "required",
+            "price" => "required|numeric|gte:0",
+            "discount" => "required|numeric|gte:0|max:100",
+            'developer' => 'required',
+            'publisher' => 'required|min:5',
+            'genre' => 'required',
+
+        ]);
+
         $newGame = new Game();
-        $newGame->setNameGame($request->input('name'));
+        $newGame->setNameGame($request->input('name_Game'));
         $newGame->setDescription($request->input('description'));
         $newGame->setPrice($request->input('price'));
         $newGame->setGenre(implode(',', $genres));
@@ -112,7 +103,7 @@ class GameController extends Controller
         $viewData = [];
 
         $viewData['title'] = 'Admin Edit Pages';
-        $viewData['game'] = Game::findOrFail($id);
+        $viewData['games'] = Game::findOrFail($id);
         $viewData['typeGame'] = Type::all();
 
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => $viewData], 201);
@@ -121,7 +112,7 @@ class GameController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|max:255',
+                'name_Game' => 'required|max:255',
                 "description" => "required",
                 "price" => "required|numeric|gte:0",
                 "discount" => "required|numeric|gte:0|max:100",
@@ -148,7 +139,7 @@ class GameController extends Controller
                 $newTypeGame->save();
             }
         }
-        $oldGame->SetNameGame($request->input('name'));
+        $oldGame->SetNameGame($request->input('name_Game'));
         $oldGame->setDescription($request->input('description'));
         $oldGame->setPrice($request->input('price'));
         $oldGame->setGenre(implode(',', $genres));
