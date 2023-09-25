@@ -86,13 +86,48 @@ ul {
 .fs-big {
 	font-size: 2.5rem !important;
 }
+@media (max-width: 576px) {
+	.col-2-4 {
+		flex: 0 0 auto;
+		width: 20%;
+	}
+}
 
-@media (min-width: 992px) {
+@media (min-width: 576px) {
+	.col-sm-2-4 {
+		flex: 0 0 auto;
+		width: 20%;
+	}
+}
+
+@media (min-width: 768px) {
 	.col-md-2-4 {
 		flex: 0 0 auto;
 		width: 20%;
 	}
+}
 
+@media (min-width: 992px) {
+	.col-lg-2-4 {
+		flex: 0 0 auto;
+		width: 20%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.col-xl-2-4 {
+		flex: 0 0 auto;
+		width: 20%;
+	}
+}
+
+@media (min-width: 1400px) {
+	.col-xxl-2-4 {
+		flex: 0 0 auto;
+		width: 20%;
+	}
+}
+@media (min-width: 768px) {
 	.fs-big {
 		font-size: 4rem !important;
 	}

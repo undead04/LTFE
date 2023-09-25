@@ -2,59 +2,90 @@ import api from "./api";
 import ResponseWrapper from "./ResponseWrapper";
 
 export interface IGame {
-  id: number;
-  name_Game: string;
-  discount: number;
-  image: string;
-  price: number;
-  description: string;
+	id: number;
+	name_Game: string;
+	discount: number;
+	image: string;
+	price: number;
+	description: string;
 }
 export type gameInfo<T> = {
-  title: string;
-  games: T[];
-  type: T[];
+	title: string;
+	games: T[];
+	type: T[];
+};
+
+export type gameByGenreInfo = {
+	title: string;
+	games: Array<IGame>;
+	type: string;
 };
 
 export type homePageInfo<T> = {
-  title: string;
-  paner: Array<T>;
-  bestSaler: Array<T>;
-  gameAction: Array<T>;
-  gameTactical: Array<T>;
-  gameCasual: Array<T>;
-  gameCard: Array<T>;
-  gameMMO: Array<T>;
-  gameSimulation: Array<T>;
-  gamePuzzle: Array<T>;
-  gameAdventure: Array<T>;
-  gameSports: Array<T>;
-  gameStrategy: Array<T>;
-  gameArcade: Array<T>;
+	title: string;
+	paner: Array<T>;
+	bestSaler: Array<T>;
+	gameAction: Array<T>;
+	gameTactical: Array<T>;
+	gameCasual: Array<T>;
+	gameCard: Array<T>;
+	gameMMO: Array<T>;
+	gameSimulation: Array<T>;
+	gamePuzzle: Array<T>;
+	gameAdventure: Array<T>;
+	gameSports: Array<T>;
+	gameStrategy: Array<T>;
+	gameArcade: Array<T>;
 };
 export type gameSingInfo<T> = {
-  title: string;
-  game: T;
+	title: string;
+	game: T;
+};
+
+export type genreListProps = {
+	title: string;
+	genreList: Array<IGame>;
 };
 const list = () => {
-  return api
-    .get<ResponseWrapper<gameInfo<IGame>>>(api.url.games)
-    .then((res) => res.data);
+	return api
+		.get<ResponseWrapper<gameInfo<IGame>>>(api.url.games)
+		.then((res) => res.data);
 };
 
 const get = (id: number) =>
-  api
-    .get<ResponseWrapper<gameSingInfo<IGame>>>(`${api.url.games}/${id}`)
-    .then((res) => res.data);
+	api
+		.get<ResponseWrapper<gameSingInfo<IGame>>>(
+			`${api.url.games}/${id}`,
+		)
+		.then((res) => res.data);
 
 const home = () => {
-  return api
-    .get<ResponseWrapper<homePageInfo<IGame>>>(api.url.home)
-    .then((res) => res.data);
+	return api
+		.get<ResponseWrapper<homePageInfo<IGame>>>(api.url.home)
+		.then((res) => res.data);
+};
+
+const listByGenre = (genre: string) => {
+	return api
+		.get<ResponseWrapper<gameByGenreInfo>>(
+			`${api.url.games}/viewMore/${genre}`,
+		)
+		.then((res) => res.data);
+};
+
+const filterByGenre = (genreList: string) => {
+	return api
+		.post<ResponseWrapper<genreListProps>>(
+			`${api.url.games}/filter/${genreList}`,
+		)
+		.then((res) => res.data);
 };
 const gameService = {
-  list,
-  get,
-  home,
+	list,
+	get,
+	home,
+	listByGenre,
+	filterByGenre,
 };
 
 export default gameService;

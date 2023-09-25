@@ -32,7 +32,7 @@ const GameCard: React.FC<GameCardProps> = ({
 	});
 	return (
 		<div
-			className={`col-${sizeArray[0]} col-md-${sizeArray[1]} col-md-${sizeArray[2]}`}
+			className={`col-${sizeArray[0]} col-md-${sizeArray[1]} col-lg-${sizeArray[2]}`}
 		>
 			<div>
 				<Link to={`/games/${id}`}>

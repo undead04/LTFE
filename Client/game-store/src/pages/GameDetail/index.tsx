@@ -68,12 +68,6 @@ const GameDetail = () => {
 									<div className="text-secondary fw-semibold fs-secondary">
 										Genres
 									</div>
-									<a href="/">Action</a>
-									<a href="/">Action-Adventure</a>
-									<a href="/">Adventure</a>
-									<a href="/">Open World</a>
-									<a href="/">Party</a>
-									<a href="/">Platformer</a>
 								</div>
 							</div>
 

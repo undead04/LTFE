@@ -9,19 +9,27 @@ type FormAttributes = React.FormHTMLAttributes<HTMLFormElement>;
 interface FilterProps
 	extends React.DetailedHTMLProps<FormAttributes, HTMLFormElement> {
 	size?: number;
+	onFilter?: any;
+	amount?: number;
 }
 
 const Filter = ({
 	size = 3,
 	children,
+	onFilter,
+	amount = 0,
 	...others
 }: React.PropsWithChildren<FilterProps>) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		onFilter();
+	};
 	return (
 		<div className={`col-md-${size}`}>
 			<div className={clsx(styles.filter_games, "text-light")}>
-				<form id="filter_form" {...others}>
+				<form onSubmit={handleSubmit} id="filter_form" {...others}>
 					<div className={clsx(styles.filter_header)}>
-						<span>Filter (0)</span>
+						<span>Filter ({amount})</span>
 						<Link className="text-light" to="/games">
 							Reset
 						</Link>
