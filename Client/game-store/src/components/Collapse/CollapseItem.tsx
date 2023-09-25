@@ -6,15 +6,24 @@ type CollapseItemProps = {
 	id: number;
 	name: string;
 	value: string;
+	change?: any;
 };
-const CollapseItem = ({ id, name, value }: CollapseItemProps) => {
+const CollapseItem = ({
+	id,
+	name,
+	value,
+	change,
+}: CollapseItemProps) => {
 	const [check, setCheck] = useState(false);
 
 	// const handleCheck = () => {
 	// 	setCheck((check) => !check);
 	// 	console.log("check");
 	// };
-
+	const handleCheck = () => {
+		setCheck(!check);
+		change();
+	};
 	return (
 		<>
 			<li
@@ -24,7 +33,7 @@ const CollapseItem = ({ id, name, value }: CollapseItemProps) => {
 					},
 					"flex-1 text-light",
 				)}
-				onClick={() => setCheck(!check)}
+				onClick={handleCheck}
 			>
 				<input
 					autoComplete="off"
@@ -33,12 +42,11 @@ const CollapseItem = ({ id, name, value }: CollapseItemProps) => {
 					value={id}
 					hidden
 					checked={check}
-					onChange={() => setCheck(!check)}
+					onChange={handleCheck}
 					// hidden
 					id={"filter-" + id}
 				/>
 				{value}
-				{check}
 			</li>
 		</>
 	);

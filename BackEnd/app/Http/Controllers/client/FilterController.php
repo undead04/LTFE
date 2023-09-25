@@ -15,54 +15,60 @@ use Illuminate\Support\Str;
 class FilterController extends Controller
 {
     //
-    public function filter(Request $request)
+    public function filter($genreList)
     {
-        // $re = $request->all();
-        $genreItem = [];
-        $genreItem = $request->input('genreItem');
-        // dd($genreItem);
-        $genreList = DB::table('games')->pluck('genre', 'id');
-        // dd($genreList);
-        $games = DB::table('games')->get();
-        $result = [];
-        // dd($games);
-        // dd($genreList);
-        $viewData = [];
-        $viewData['games'] = [];
-        $viewData['oldCheck'] =  $genreItem;
-        // dd($genreItem);
+        $data = json_decode($genreList);
 
-        // dd();
-        // DB::table('games')->whereIn("id",);
-        foreach ($genreList as $index => $genre) {
+        $list = $data;
+        $results = [];
+        $games = Game::query()->select('games.id', 'games.price', 'games.image', 'games.name_Game', 'games.description', 'games.discount', 'games.genre')->distinct()->get();
+        foreach ($games as $game) {
             # code...
-            $item = Str::of($genre)->split('/[\s,]+/');
-            $item = $item->toArray();
-            // dd(typeOf($item));
-            if (isset($genreItem)) {
-                foreach ($item as $key => $value) {
-                    # code...
-                    if (in_array($value, $genreItem)) {
-                        $result[] = $index;
-                        // dd($result);
+            $gameGenreList = Str::of($game->genre)->split('/[\s,]+/');
+
+            foreach ($gameGenreList as $genre) {
+                # code...
+                if(in_array($genre, $list)) {
+                    if(in_array($game, $results)) {
+                        continue;
+                    } else {
+                        $results[] = $game;
                     }
                 }
-            } else {
-                return redirect()->route('clients.games');
             }
+            
         }
-        // dd($result);
-        $viewData['games'] = Game::whereIn('id', $result)->get();
-        // dd($viewData['games']);
-        $viewData['title'] = "Game Result " . count($viewData['games']) . " items found";
-        $viewData['type'] = Type::all();
+       
 
-        // dd($viewData['games']);
-        // dd($result);
-        // $viewData['title'] = "Game Store";
-        // $viewData['type'] = TypeGame::all();
-        $request->flash();
-        // $filterItems = [];
-
+        return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
+            'title' => "Hi",
+            'genreList' => $results,
+            // 'type' => $typeName->getTypeGame()
+        ]], 200);
+        // $genreItem = [];
+       
+        // $genreList = DB::table('games')->pluck('genre', 'id');
+        // $games = DB::table('games')->get();
+        // $result = [];
+        // $viewData = [];
+        // $viewData['games'] = [];
+        // $viewData['oldCheck'] =  $genreItem;
+        // foreach ($genreList as $index => $genre) {
+        //     # code...
+        //     $item = Str::of($genre)->split('/[\s,]+/');
+        //     $item = $item->toArray();
+        //     if (isset($genreItem)) {
+        //         foreach ($item as $key => $value) {
+        //             if (in_array($value, $genreItem)) {
+        //                 $result[] = $index;
+        //             }
+        //         }
+        //     } else {
+        //         return redirect()->route('clients.games');
+        //     }
+        // }
+        // $viewData['games'] = Game::whereIn('id', $result)->get();
+        // $viewData['title'] = "Game Result " . count($viewData['games']) . " items found";
+        // $viewData['type'] = Type::all();
     }
 }

@@ -33,6 +33,7 @@ Route::prefix('games')->group(function () {
     Route::get('/', [ClientGameController::class, 'allGames'])->name('clients.games'); //lấy tất cả game
     Route::get('/{id}', [ClientGameController::class, 'detail'])->name('clients.gamesDetail'); //chọn game chi tiết
     Route::get('viewMore/{type}', [ClientGameController::class, 'viewMore'])->name('clients.viewMore'); //chọn game viewMore theo loại
+    Route::post('filter/{genreList}', [FilterController::class, 'filter'])->name('games.filter'); //filter cho trang games
 });
 Route::prefix('/')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('clients.home'); //trang home

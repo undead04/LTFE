@@ -21,7 +21,7 @@ class HomeController extends Controller
     {
 
         $title = 'Home page | Web game store';
-        $paner = Game::query()->orderBy('price', 'desc')->select('id', 'price', 'image', 'name_Game', 'discount', 'description')->take(6)->get();
+        $paner = Game::query()->orderBy('price', 'desc')->select('id', 'price', 'image', 'image-paner', 'name_Game', 'discount', 'description')->take(6)->get();
 
         $bestSaler = Game::join('gameorders', 'games.id', '=', 'gameorders.gameId')
             ->select(

@@ -67,7 +67,7 @@ class GameController extends Controller
         $title = $typeName->getTypeGame() . ' | viewMore';
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
             'title' => $title,
-            'game' => $game,
+            'games' => $game,
             'type' => $typeName->getTypeGame()
         ]], 200);
     }
