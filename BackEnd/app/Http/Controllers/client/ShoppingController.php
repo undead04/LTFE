@@ -69,11 +69,12 @@ class ShoppingController extends Controller
         Cache()->put('cart', $cart);
         return response()->json(['errorCode' => 0, 'message' => 'xóa sản phẩm thành công', 'data' => ''], 200);
     }
-    public function purchase()
+    public function purchase(Request $request)
     {
         $gameInSession = Cache()->get("cart");
         if ($gameInSession) {
-            $userId = Auth::user()->getId();
+            $token = $request->header('Authorization');
+
             $order = new Order();
             $order->setUserId($userId);
             $order->setTotal(0);
