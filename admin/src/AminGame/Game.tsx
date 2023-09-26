@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Input from "../component/Input";
-import gameServics, { IGameAdd, ITypeAdd } from "../services/gameServics";
-
+import gameServics, {
+  IGameAdd,
+  ITypeAdd,
+  gameMessage,
+} from "../services/gameServics";
+import { toast } from "react-toastify";
 const Game = () => {
   const [showModel, setShowModel] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<gameMessage>();
   const [title, setTitle] = useState("");
   const [listGame, setListGame] = useState<IGameAdd[]>([]);
   const [listType, setListType] = useState<ITypeAdd[]>([]);
@@ -82,25 +86,37 @@ const Game = () => {
       gameServics.add(game).then((res) => {
         if (res.errorCode === 0) {
           handleCloseModel();
+          toast.success(res.message);
           loadData();
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
         }
       });
     } else {
       gameServics.update(id, game).then((res) => {
-        handleCloseModel();
-        loadData();
+        if (res.errorCode === 0) {
+          handleCloseModel();
+          toast.success(res.message);
+          loadData();
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
+        }
       });
     }
   };
+
   useEffect(() => {
     loadData();
   }, []);
   const handleDelete = (e: any, id: number) => {
     e.preventDefault();
-    console.log(id);
+
     gameServics.delete(id).then((res) => {
       if (res.errorCode === 0) {
         loadData();
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
     });
   };
@@ -188,13 +204,16 @@ const Game = () => {
               name="name_Game"
               type="text"
               onChange={handleChange}
+              message={message?.name_Game}
               defaultValue={game.name_Game}
             />
+
             <Input
               label="Developer"
               name="developer"
               type="text"
               onChange={handleChange}
+              message={message?.developer}
               defaultValue={game.developer}
             />
             <Input
@@ -202,6 +221,7 @@ const Game = () => {
               name="publisher"
               type="text"
               onChange={handleChange}
+              message={message?.publisher}
               defaultValue={game.publisher}
             />
             <div className="form-group">
@@ -225,6 +245,7 @@ const Game = () => {
                     </option>
                   ))}
                 </select>
+                <span className="text-danger">{message?.genre}</span>
               </div>
             </div>
 
@@ -235,6 +256,7 @@ const Game = () => {
               step={0.01}
               onChange={handleChange}
               defaultValue={game.price}
+              message={message?.price}
             />
             <Input
               label="Discount"
@@ -242,6 +264,7 @@ const Game = () => {
               type="number"
               onChange={handleChange}
               defaultValue={game.discount}
+              message={message?.discount}
             />
             <Input
               label="Image Main"
@@ -270,6 +293,7 @@ const Game = () => {
               name="description"
               row={3}
               onChange={handleChange}
+              message={message?.description}
               defaultValue={game.description}
             />
           </form>

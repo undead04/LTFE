@@ -14,12 +14,14 @@ interface Props extends DetailedHTMLProps<InputAttributes, HTMLInputElement> {
   inputRef?: any;
   name: string;
   row?: number;
+  message?: string[];
 }
 const input: FC<Props> = ({
   label,
   name,
   row = 0,
   inputRef,
+  message = "",
   ...other
 }): ReactElement => {
   return (
@@ -44,6 +46,7 @@ const input: FC<Props> = ({
               className="form-control bg-transparent text-primary"
             />
           )}
+          <span className="text-danger">{message}</span>
         </div>
       </div>
     </>

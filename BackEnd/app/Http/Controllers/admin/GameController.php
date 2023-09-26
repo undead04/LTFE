@@ -39,7 +39,7 @@ class GameController extends Controller
         'price' => "required|numeric|gte:0",
         'discount' => "required|numeric|gte:0|max:100",
         "genre" => 'required',
-        "discription" => 'required',
+        "description" => 'required',
     ];
     private $messages = [
         'name_Game.required' => "trường name bắt buộc",
@@ -57,7 +57,7 @@ class GameController extends Controller
         "discount.gte" => ':attributes phải lớn hơn :gte',
         "discount.max" => ':attributes phải nhơ hơn hoặc băng :max',
         'genre.required' => "trường :attributes bắt buộc",
-        'discription.required' => "trường :attributes bắt buộc",
+        'description.required' => "trường :attributes bắt buộc",
 
 
     ];

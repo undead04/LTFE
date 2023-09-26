@@ -10,7 +10,15 @@ type gameInfo<T> = {
   games: T;
   typeGame: T[];
 };
-
+export interface gameMessage {
+  name_Game: string[];
+  description: string[];
+  price: string[];
+  genre: string[];
+  discount: string[];
+  publisher: string[];
+  developer: string[];
+}
 export interface IGameAdd {
   id: number;
   name_Game: string;
