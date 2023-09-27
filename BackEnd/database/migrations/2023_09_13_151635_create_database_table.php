@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -21,16 +21,17 @@ return new class extends Migration
             $table->string('password');
             $table->string('role')->default('client');
             $table->integer('balance');
-            $table->string('api_token')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
+
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->double('total');
             $table->unsignedBigInteger('userId'); // Khóa ngoại
 
-            $table->foreign('userId')->references('id')->on('users');
+            $table->foreign('userId')->references('id')->on('members');
             $table->timestamps();
         });
         Schema::create('types', function (Blueprint $table) {
@@ -78,7 +79,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('members');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('types');
         Schema::dropIfExists('games');

@@ -51,7 +51,7 @@ class GameController extends Controller
 
         $validator = Validator::make($request->all(), $this->rules, $this->messages);
         if ($validator->fails()) {
-            return BaseResponse::withData($request->all());
+
             return BaseResponse::error(400, $validator->messages()->toJson());
         }
 

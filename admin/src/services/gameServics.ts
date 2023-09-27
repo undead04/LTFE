@@ -31,7 +31,7 @@ export interface IGameAdd {
   discount: number;
   publisher: string;
   developer: string;
-  image?: any;
+  imageMain?: any;
 }
 export interface ITypeAdd {
   id: number;

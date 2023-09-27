@@ -34,6 +34,7 @@ class MembersController extends Controller
                 $members->name = $request->name;
                 $members->email = $request->email;
                 $members->password = bcrypt($request->password);
+                $members->balance = 5000;
                 $members->save();
                 return BaseResponse::withData($members);
             } catch (\Exception $e) {
@@ -63,21 +64,6 @@ class MembersController extends Controller
         } else {
 
             return BaseResponse::error(1, 'Wrong email or password');
-        }
-    }
-    public function upload(Request $request)
-    {
-        return $request->file('image');
-
-        $viewData[] = $request->input('name');
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = $file->getClientOriginalName();
-            $viewData[] = $fileName;
-
-            return response()->json(['data' => $viewData]);
-        } else {
-            return response()->json(['message' => "them anh thaats baij"]);
         }
     }
 }
