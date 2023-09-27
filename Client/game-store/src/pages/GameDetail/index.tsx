@@ -5,7 +5,9 @@ import Image from "../../components/Image";
 import clsx from "clsx";
 import styles from "./GameDetail.module.scss";
 import gameService, { IGame } from "../../services/gameService";
-
+import { useDispatch } from "react-redux";
+import { add } from "../../store/reducers/cart";
+import cartService from "../../services/cartService";
 // type GameDetailProps = {
 // 	title: string;
 // 	imgBanner: string;
@@ -18,10 +20,12 @@ import gameService, { IGame } from "../../services/gameService";
 // 	releaseDate?: Date;
 // };
 const GameDetail = () => {
+	const dispatch = useDispatch();
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const [game, setGame] = useState<IGame>();
 	const [genre, setGenre] = useState<Array<String>>([]);
+
 	const loadData = () => {
 		gameService.get(Number(id)).then((res) => {
 			setGame(res.data.game);
@@ -29,6 +33,13 @@ const GameDetail = () => {
 				setGenre(res.data.type);
 			}
 		});
+	};
+
+	const addCartHandler = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (game) {
+			dispatch(add({ cartItem: game }));
+		}
 	};
 	useEffect(() => {
 		if (!/\d+/.test(id as string)) {
@@ -149,7 +160,7 @@ const GameDetail = () => {
 											: "BUY NOW"}
 									</button>
 								</form>
-								<form action="" method="post">
+								<form onSubmit={addCartHandler}>
 									<button
 										type="submit"
 										className="w-100 py-3 btn btn-lg btn-outline-light text-center"

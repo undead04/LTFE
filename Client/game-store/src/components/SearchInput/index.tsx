@@ -13,6 +13,7 @@ interface searchProps
 	id?: string;
 	name?: string;
 	range?: string;
+	searchRef?: any;
 }
 const SearchInput = ({
 	placeholder,
@@ -20,6 +21,7 @@ const SearchInput = ({
 	name,
 	range = "d-none d-md-flex",
 	children,
+	searchRef,
 	...others
 }: React.PropsWithChildren<searchProps>) => {
 	const [active, setActive] = useState(false);
@@ -47,6 +49,7 @@ const SearchInput = ({
 					onChange={(e) => setValue(e.target.value)}
 					onFocus={() => setActive(true)}
 					onBlur={() => setActive(false)}
+					ref={searchRef}
 					{...others}
 				/>
 			</div>

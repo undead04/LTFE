@@ -11,12 +11,14 @@ interface FilterProps
 	size?: number;
 	onFilter?: any;
 	amount?: number;
+	onReset?: any;
 }
 
 const Filter = ({
 	size = 3,
 	children,
 	onFilter,
+	onReset,
 	amount = 0,
 	...others
 }: React.PropsWithChildren<FilterProps>) => {
@@ -30,9 +32,9 @@ const Filter = ({
 				<form onSubmit={handleSubmit} id="filter_form" {...others}>
 					<div className={clsx(styles.filter_header)}>
 						<span>Filter ({amount})</span>
-						<Link className="text-light" to="/games">
+						<span className="text-light" onClick={onReset}>
 							Reset
-						</Link>
+						</span>
 					</div>
 					<div>{children}</div>
 					<button className="btn btn-outline-secondary w-100 py-3 fs-primary text-center mt-3">

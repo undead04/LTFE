@@ -8,8 +8,57 @@ import SearchInput from "./../../components/SearchInput/index";
 import SearchResult from "../../components/SearchResult";
 import SearchItem from "../../components/SearchItem";
 import { Dropdown } from "react-bootstrap";
+import { RootState } from "../../store";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../store/reducers/auth";
+import searchService, {
+	ISearchItem,
+	ISearchResult,
+} from "../../services/searchService";
+import { deleteCart } from "../../store/reducers/cart";
 const Header = () => {
-	const CurrentUser = true;
+	const dispatch = useDispatch();
+	const isLoggedIn = useSelector(
+		(state: RootState) => state.auth.isLoggedIn,
+	);
+	const userInfo = useSelector(
+		(state: RootState) => state.auth.userInfo,
+	);
+
+	// Search
+	const searchRef = React.createRef<any>();
+	const searchMobileRef = React.createRef<any>();
+	const [search, setSearch] = useState("");
+	const [gameSearch, setGameSearch] = useState<Array<ISearchItem>>(
+		[],
+	);
+	const searchChangeHandler = () => {
+		setSearch(
+			searchRef.current.value || searchMobileRef.current.value,
+		);
+		if (search) {
+			searchService.search(search).then((res) => {
+				setGameSearch(res.data.hintSearch);
+			});
+		} else {
+			setGameSearch([]);
+			setSearch("");
+		}
+	};
+
+	const logoutHandler = () => {
+		dispatch(logout());
+		dispatch(deleteCart());
+	};
+	useEffect(() => {
+		const timeOutId = setTimeout(() => {
+			searchChangeHandler();
+		}, 500);
+
+		return () => {
+			clearTimeout(timeOutId);
+		};
+	}, [search]);
 	return (
 		<>
 			<header className="fixed-top sticky-top">
@@ -39,14 +88,14 @@ const Header = () => {
 									"d-none d-md-flex",
 								)}
 							>
-								{CurrentUser ? (
+								{isLoggedIn ? (
 									<Dropdown>
 										<Dropdown.Toggle
 											variant="transparent"
 											id="dropdown-basic"
 											className="h-100 fs-primary text-light d-flex align-items-center"
 										>
-											Username
+											{userInfo && userInfo?.name}
 										</Dropdown.Toggle>
 
 										<Dropdown.Menu className="bg-secondary">
@@ -65,7 +114,8 @@ const Header = () => {
 												capitalize
 											/>
 											<NavItem
-												to="/"
+												onClick={logoutHandler}
+												to="/home"
 												labelText="Logout"
 												className=""
 												icons="fa-solid fa-right-from-bracket"
@@ -117,13 +167,8 @@ const Header = () => {
 					aria-labelledby="navOffCanvasLabel"
 				>
 					<div className="offcanvas-header" style={{ height: 50 }}>
-						{/* @guest */}
 						<div />
-						{/* @else */}
-						{/* <div>
-        <span className="fs-big">{'{'}{'{'} auth()-&gt;user()-&gt;getName() {'}'}{'}'}</span>
-      </div> */}
-						{/* @endguest */}
+
 						<button
 							type="button"
 							className="btn-close bg-light"
@@ -133,56 +178,56 @@ const Header = () => {
 					</div>
 					<div className="offcanvas-body">
 						<div className={clsx(styles.offcanvas_item)}>
-							<a
-								href="{{ route('clients.home') }}"
+							<Link
+								to="/home"
 								className={clsx(
 									"text-capitalize text-light",
 									styles.offcanvas_link,
 								)}
 							>
 								store
-							</a>
+							</Link>
 						</div>
 						<div className={clsx(styles.offcanvas_item)}>
-							<a
-								href="{{ route('clients.distribution') }}"
+							<Link
+								to="/distribution"
 								className={clsx(
 									"text-capitalize text-light",
 									styles.offcanvas_link,
 								)}
 							>
 								distribution
-							</a>
+							</Link>
 						</div>
 						<div className={clsx(styles.offcanvas_item)}>
-							<a
-								href="{{ route('clients.games') }}"
+							<Link
+								to="/games"
 								className={clsx(
 									"text-capitalize text-light",
 									styles.offcanvas_link,
 								)}
 							>
 								game
-							</a>
+							</Link>
 						</div>
 						{/* @guest chưa login */}
-						{!CurrentUser ? (
+						{!isLoggedIn ? (
 							<>
 								<div className={clsx(styles.offcanvas_item)}>
-									<a
-										href="{{ route('login') }}"
+									<Link
+										to="/login"
 										className="btn btn-secondary text-capitalize text-light d-flex w-100 h-75 fs-2 align-items-center justify-content-center mt-5"
 									>
 										Login
-									</a>
+									</Link>
 								</div>
 								<div className={clsx(styles.offcanvas_item)}>
-									<a
-										href="{{ route('register') }}"
+									<Link
+										to="/register"
 										className="btn btn-danger text-capitalize text-light d-flex w-100 h-75 fs-2 align-items-center justify-content-center mt-5"
 									>
 										Register
-									</a>
+									</Link>
 								</div>
 							</>
 						) : (
@@ -211,6 +256,7 @@ const Header = () => {
 								</div>
 								<div className={clsx(styles.offcanvas_item)}>
 									<Link
+										onClick={logoutHandler}
 										to="/"
 										className={clsx(
 											"text-capitalize text-light",
@@ -243,7 +289,7 @@ const Header = () => {
 									>
 										<i className="fa-solid fa-bars" />
 									</button>
-
+									{/* Mobile search */}
 									<SearchInput
 										placeholder="Search for games"
 										id="searchInput"
@@ -251,13 +297,29 @@ const Header = () => {
 										autoComplete="off"
 										type="search"
 										range="d-flex d-md-none"
+										searchRef={searchMobileRef}
+										value={search}
+										onChange={() =>
+											setSearch(searchMobileRef.current.value)
+										}
 									>
-										<SearchResult>
-											<SearchItem
+										<SearchResult counter={gameSearch.length}>
+											{/* Demo */}
+											{/* <SearchItem
 												value="EA ESPORT VNVN"
 												id="1"
 												imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
-											/>
+											/> */}
+											{gameSearch.length > 0
+												? gameSearch.map((item) => (
+														<SearchItem
+															value={item.name_Game}
+															id={item.id}
+															key={item.id}
+															imgsrc={item.image}
+														/>
+												  ))
+												: ""}
 										</SearchResult>
 									</SearchInput>
 								</div>
@@ -265,57 +327,7 @@ const Header = () => {
 						</div>
 					</div>
 				</div>
-				{/* @else */}
-				{/* đã login */}
-				{/* <div className={clsx(styles.offcanvas_item)}>
-        <a href="{{ route('cart.index') }}" className="text{clsx(-capitalize text-light", styles.offcanvas_link)}>
-          <span><i className="fa-solid fa-cart-shopping" />
-            Cart</span></a>
-      </div>
-      <div className={clsx(styles.offcanvas_item)}>
-        <a href="{{ route('cart.orders') }}" className="text{clsx(-capitalize text-light", styles.offcanvas_link)}>
-          <span><i className="fa-solid fa-wallet" />
-            Orders</span></a>
-      </div>
-      <div className={clsx(styles.offcanvas_item)}>
-        <form className="flex-grow-1" action="{{ route('logout') }}" id="logout" method="POST">
-          <a role="button" className={clsx("text-capitalize text-light", styles.offcanvas_link)} onclick="document.getElementById('logout').submit()">
-            <span className="d-flex justify-content-between"><span>Logout
-                <i className="fa-solid fa-right-from-bracket" /></span></span>
-          </a>
-          @csrf
-        </form>
-      </div> */}
-				{/* @endguest */}
-
-				{/* <div
-									className={clsx(
-										styles.search_area,
-										styles.headnav_item,
-									)}
-								>
-									<div
-										className={clsx(
-											styles.headnav_search,
-											"form-group",
-										)}
-									>
-										<span>
-											<i className="fa-solid fa-magnifying-glass" />
-										</span>
-										<input
-											autoComplete="off"
-											type="search"
-											id="searchGame"
-											name="gameName"
-											placeholder="Search store"
-										/>
-									</div>
-									<div className={clsx(styles.search_results, "row")}>
-										<div id="ListGames" className="col-12" />
-									</div>
-								</div> */}
-
+				{/* PC, tablet search */}
 				<section className="bg-black py-5">
 					<div className="container-md">
 						<SearchInput
@@ -324,145 +336,27 @@ const Header = () => {
 							name="searchInput"
 							autoComplete="off"
 							type="search"
+							searchRef={searchRef}
+							value={search}
+							onChange={() => setSearch(searchRef.current.value)}
+							// onFocus={searchChangeHandler}
 						>
-							<SearchResult>
-								<SearchItem
-									value="EA ESPORT VNVN"
-									id="1"
-									imgsrc="http://localhost:8000/storage/650922e5c436b.webp"
-								/>
+							<SearchResult counter={gameSearch.length}>
+								{gameSearch.length > 0
+									? gameSearch.map((item) => (
+											<SearchItem
+												value={item.name_Game}
+												id={item.id}
+												key={item.id}
+												imgsrc={item.image}
+											/>
+									  ))
+									: ""}
 							</SearchResult>
 						</SearchInput>
 					</div>
 				</section>
 			</header>
-
-			{/* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
-</script> */}
-			{/* <script>
-    // Query search result
-    $(document).ready(function() {
-        $('#searchGame').keyup(function() {
-            var query = $(this).val();
-            console.log(query);
-            if (query != '') {
-                $.ajax({
-                    url: `{{ route('search') }}?key=` +
-                        query,
-
-                    method: "GET",
-                    success: function(data) {
-
-                        $('#ListGames').html(data);
-
-                    }
-
-                });
-            } else {
-                $('#ListGames').html('');
-            }
-
-        });
-    });
-
-    // Active, not active search result
-    const searchInput = document.getElementById('searchGame');
-    const searchResult = document.querySelector('.search_results')
-    searchInput.addEventListener('focus', () => {
-        searchResult.classList.add('active')
-    });
-
-    searchInput.addEventListener('blur', () => {
-        let timeOutID = setTimeout(() => {
-            searchResult.classList.remove('active')
-            clearTimeout(timeOutID);
-        }, 1000);
-    });
-
-    const navLinks = document.querySelectorAll(".nav_options");
-    const originLinks = (location.href).split('?')[0];
-    navLinks.forEach(navLink => {
-        //Kiểm tra nếu url = navLink href
-        if (originLinks === navLink.href) {
-            // Thêm class active cho navLink đó
-            navLink.classList.add('active');
-        };
-
-    });
-</script> */}
-
-			{/* <a
-									href="{{ route('login') }}"
-									className="text-light nav_options me-2"
-								>
-									<i className="fa-solid fa-right-to-bracket me-2" />
-									Login
-								</a>
-								<a
-									href="{{ route('register') }}"
-									className="text-light nav_options"
-								>
-									Register
-								</a> */}
-			{/* <div
-									id="dropdown"
-									className="dropdown d-flex align-items-center"
-								>
-									<button
-										type="button"
-										className="dropdown-toggle btn btn-dark h-100 fs-4"
-										data-bs-toggle="dropdown"
-										aria-expanded="false"
-									>
-										<i className="fa-solid fa-user" />
-										<span className="ms-1">User</span>
-									</button>
-									<ul
-										className={clsx(
-											styles.user_options,
-											"dropdown-menu dropdown-menu-dark position-absolute left-0 right-0",
-										)}
-									>
-										<li>
-											<a href="/" className="text-light">
-												<span>
-													<i className="fa-solid fa-cart-shopping" />
-													Cart
-												</span>
-												<div className="badge bg-light py-2 px-3 rounded-2 text-dark ms-2">
-													1
-												</div>
-											</a>
-										</li>
-										<li>
-											<a href="/order" className="text-light">
-												<span>
-													<i className="fa-solid fa-wallet" />
-													Orders
-												</span>
-											</a>
-										</li>
-										<li>
-											<form
-												action="{{ route('logout') }}"
-												id="logout"
-												method="POST"
-											>
-												<a
-													href="/"
-													role="button"
-													className="text-light"
-												>
-													<span>
-														<i className="fa-solid fa-right-from-bracket" />
-														<span>Logout</span>
-													</span>
-												</a>
-											</form>
-										</li>
-									</ul>
-								</div> */}
-			{/* @endguest */}
 		</>
 	);
 };

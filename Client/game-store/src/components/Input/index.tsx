@@ -14,6 +14,7 @@ interface InputProps
 	name?: string;
 	title?: string;
 	message?: string;
+	inputRef?: any;
 }
 const Input: FC<InputProps> = ({
 	placeholder,
@@ -21,6 +22,7 @@ const Input: FC<InputProps> = ({
 	name,
 	title,
 	message,
+	inputRef,
 	...others
 }) => {
 	return (
@@ -33,6 +35,7 @@ const Input: FC<InputProps> = ({
 					{title}
 				</label>
 				<input
+					ref={inputRef}
 					{...others}
 					id={id}
 					className={clsx(styles.inputGroup__input, {

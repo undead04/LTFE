@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 type Props = {
 	value: string;
 	imgsrc: string;
-	id: string;
+	id: number;
 };
 const SearchItem: FC<Props> = ({ id, imgsrc, value }) => {
 	return (

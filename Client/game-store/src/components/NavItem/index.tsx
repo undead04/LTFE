@@ -10,6 +10,7 @@ type NavItemProps = {
 	src?: string;
 	icons?: string;
 	capitalize?: boolean;
+	onClick?: any;
 };
 
 const NavItem: FC<NavItemProps> = ({
@@ -19,6 +20,7 @@ const NavItem: FC<NavItemProps> = ({
 	src,
 	icons,
 	capitalize,
+	onClick,
 }) => {
 	const classes = src
 		? clsx(styles.brand_img)
@@ -34,7 +36,7 @@ const NavItem: FC<NavItemProps> = ({
 		</>
 	);
 	return (
-		<NavLink to={to} className={classes}>
+		<NavLink onClick={onClick} to={to} className={classes}>
 			{src ? (
 				<img className="img-fluid" src={src} alt="logo" />
 			) : (

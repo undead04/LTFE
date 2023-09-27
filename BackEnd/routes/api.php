@@ -42,7 +42,7 @@ Route::get('login', function () {
 })->name('login');
 Route::prefix('/')->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('clients.home'); //trang home
-    Route::get('search', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
+    Route::get('search/{key}', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
     Route::post('/member/register', [MembersController::class, 'register']);
     Route::post('/member/login', [MembersController::class, 'login']);
 });
