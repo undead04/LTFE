@@ -85,7 +85,7 @@ const Game = () => {
     const fData = new FormData();
     fData.append("image", imageMain[0]);
     if (Number(id) === 0) {
-      gameServics.add({ ...game, image: fData }).then((res) => {
+      gameServics.add(game).then((res) => {
         console.log(res.message);
         if (res.errorCode === 0) {
           console.log(res);

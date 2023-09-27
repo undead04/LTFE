@@ -71,39 +71,29 @@ class ShoppingController extends Controller
     }
     public function purchase(Request $request)
     {
-        $gameInSession = Cache()->get("cart");
-        if ($gameInSession) {
-            $token = $request->header('Authorization');
+        $userId = $request->id;
+        $total = 0;
+        $cart = $request->cart;
 
-            $order = new Order();
-            $order->setUserId($userId);
-            $order->setTotal(0);
-            $order->save();
-            $total = 0;
-            $gameInCart = Game::findMany(array_keys($gameInSession));
-            foreach ($gameInCart as $game) {
+        $order = new Order();
+        $order->setTotal($total);
+        $order->setUserId($userId);
+        $order->save();
 
-                $item = new GameOrder();
+        foreach ($cart as $game) {
 
-                $item->setPrice($game->getPrice() - ($game->getPrice() * $game->getDiscount() / 100));
-                $item->setGameId($game->getGameId());
-                $item->setOrderId($order->getOrderId());
-                $item->save();
-                $total += $game->getPrice() - ($game->getPrice() * $game->getDiscount() / 100);
-            }
+            $item = new GameOrder();
+            $item->setPrice($game['price'] - ($game['price'] * $game['discount'] / 100));
+            $item->setGameId($game['id']);
+            $item->setOrderId($order->getOrderId());
+            $item->save();
+            $total += $game['price'] - ($game['price'] * $game['discount'] / 100);
             $order->setTotal($total);
             $order->save();
-            $newBalance = Auth::user()->getBalance() - $total;
-            Auth::user()->setBalance($newBalance);
-            Auth::user()->save();
-            session()->forget('cart');
-            $viewData = [];
-            $viewData["title"] = "Purchase - Online Store";
-            $viewData["subtitle"] = "Purchase Status";
-            $viewData["order"] = $order;
-            return response()->json($viewData, 201);
         }
+        return response()->json(['errorCode' => 0, 'message' => 'mua game thanh cong', 'data' => '']);
     }
+
     public function purchaseNow($id)
     {
         $game = Game::find($id);
