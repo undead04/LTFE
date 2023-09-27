@@ -38,7 +38,7 @@ class ShoppingController extends Controller
         $viewData['discount'] = $totalDiscount;
         $viewData['totalPrice'] = $total - $totalDiscount;
         $viewData["games"] = $gameInSession;
-        return response()->json($viewData, 200);
+        return response()->json(['errorCode' => 0, 'message' => "", "data" => $viewData], 200);
     }
     public function add($id)
     {

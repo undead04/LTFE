@@ -21,8 +21,8 @@ const Games = () => {
 	};
 
 	useEffect(() => {
-		loadData();
-	}, []);
+		checklist.length === 0 ? loadData() : filterLoad();
+	}, [checklist]);
 	const filterLoad = () => {
 		gameService
 			.filterByGenre(JSON.stringify(checklist))
@@ -41,7 +41,10 @@ const Games = () => {
 
 	const handleFilter = () => {
 		checklist.length === 0 ? loadData() : filterLoad();
-		console.log(checklist);
+	};
+
+	const handleFilterReset = () => {
+		setChecklist([]);
 	};
 
 	return (
@@ -69,7 +72,11 @@ const Games = () => {
 								/>
 							))}
 						</GameSection>
-						<Filter onFilter={handleFilter} amount={checklist.length}>
+						<Filter
+							onReset={handleFilterReset}
+							onFilter={handleFilter}
+							amount={checklist.length}
+						>
 							<Collapse id="collapseTest">
 								{/* <CollapseItem id="1" name="Genre[]" value="Action" />
 								<CollapseItem
@@ -84,6 +91,7 @@ const Games = () => {
 										value={item.typeNames}
 										key={index}
 										name="Genre[]"
+										Ischeck={!!checklist.find((c) => c === item.id)}
 									/>
 								))}
 							</Collapse>

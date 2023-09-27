@@ -10,7 +10,8 @@ type CartItemProps = {
 	releaseDate?: Date;
 	id: number;
 	imgSrc?: string;
-	discount?: number;
+	discount: number;
+	onRemove?: any;
 };
 const CartItem = ({
 	title,
@@ -19,7 +20,12 @@ const CartItem = ({
 	id,
 	imgSrc,
 	discount,
+	onRemove,
 }: CartItemProps) => {
+	const priceFormat = new Intl.NumberFormat("vi-VN", {
+		style: "currency",
+		currency: "VND",
+	});
 	return (
 		<div className="rounded-2 bg-dark mt-4">
 			<div className="d-flex p-5">
@@ -29,13 +35,56 @@ const CartItem = ({
 					</div>
 				</div>
 				<div className="cart_item_body flex-grow-1 ps-5">
-					<div className="d-flex justify-content-between align-items-center h4">
-						<div className="badge bg-secondary text-uppercase">
-							base game
-						</div>
-						<div className="fs-secondary">
-							<div className="mt-1"></div>
-						</div>
+					<div className="d-flex justify-content-end align-items-center h4">
+						{price === 0 ? (
+							<div className="game_price text-light">
+								<span className="game_new_price fw-bold mt-3">
+									Free
+								</span>
+							</div>
+						) : (
+							<>
+								{discount === 0 ? (
+									<>
+										<div
+											className={clsx(
+												styles.game_new_price,
+												"text-light",
+											)}
+										>
+											<span>{priceFormat.format(price)}</span>
+										</div>
+									</>
+								) : (
+									<>
+										<div
+											className={clsx("badge bg-primary me-3 p-2", {
+												[styles.isDiscount]: !discount,
+											})}
+										>
+											-{discount}%
+										</div>
+										<div className={clsx("game_price")}>
+											<div
+												className={clsx(
+													styles.game_old_price,
+													"text-decoration-line-through text-secondary",
+												)}
+											>
+												<span>{priceFormat.format(price)}</span>
+											</div>
+											<div className="text-light game_new_price">
+												<span>
+													{priceFormat.format(
+														price * (1 - discount / 100),
+													)}
+												</span>
+											</div>
+										</div>
+									</>
+								)}
+							</>
+						)}
 					</div>
 					<div className="d-flex">
 						<Link
@@ -45,10 +94,13 @@ const CartItem = ({
 							{title}
 						</Link>
 					</div>
-					<div className="d-flex mb-5">
+					<div className="d-flex mb-1">
 						<div className="fs-secondary text-secondary">
-							Available {releaseDate.toString()}
+							Available at {releaseDate.toString()}
 						</div>
+					</div>
+					<div className="badge bg-secondary text-uppercase mb-5">
+						base game
 					</div>
 					{/* <div className="d-block mt-5 fs-secondary">
 						<span>
@@ -62,12 +114,12 @@ const CartItem = ({
 				<span>
 					<i className="fa-brands fa-windows" />
 				</span>
-				<a
-					href="http://localhost:8000/cart/delete/28"
-					className="text-decoration-underline text-secondary"
+				<button
+					onClick={onRemove}
+					className="text-decoration-underline text-secondary bg-transparent border-0"
 				>
 					Remove
-				</a>
+				</button>
 			</div>
 		</div>
 	);

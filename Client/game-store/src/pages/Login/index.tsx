@@ -3,9 +3,36 @@ import { useState, useEffect } from "react";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Disk from "../../components/Disk";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import userService from "../../services/userService";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/reducers/auth";
 const Login = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [message, setMessage] = useState<string>("");
+	const emailRef = React.createRef<any>();
+	const passwordRef = React.createRef<any>();
+
+	const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const email = emailRef.current?.value;
+		const password = passwordRef.current?.value;
+		userService.login(email, password).then((res) => {
+			if (res.errorCode === 0) {
+				setMessage("");
+				dispatch(
+					login({
+						token: res.data.accessToken,
+						userInfo: res.data,
+					}),
+				);
+				navigate("/home");
+			} else {
+				setMessage(res.message);
+			}
+		});
+	};
 	return (
 		// <>
 		// 	<h2>Login page</h2>
@@ -22,12 +49,22 @@ const Login = () => {
 							<Disk />
 						</div>
 						<div className="col-md-5">
-							<form action="">
+							<form onSubmit={formSubmitHandler}>
 								<div className="text-light text-center fw-bold mb-5 display-3">
 									Login
 								</div>
-								<Input title="EMAIL" type="email" />
-								<Input title="PASSWORD" type="password" />
+								<Input
+									inputRef={emailRef}
+									title="EMAIL"
+									type="email"
+									message={message}
+								/>
+								<Input
+									inputRef={passwordRef}
+									title="PASSWORD"
+									type="password"
+									message={message}
+								/>
 								<div className="my-3 fs-secondary text-end me-4">
 									<label
 										className="me-3 text-white"

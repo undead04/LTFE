@@ -7,21 +7,20 @@ type CollapseItemProps = {
 	name: string;
 	value: string;
 	change?: any;
+	Ischeck?: boolean;
 };
 const CollapseItem = ({
 	id,
 	name,
 	value,
 	change,
+	Ischeck,
 }: CollapseItemProps) => {
-	const [check, setCheck] = useState(false);
-
 	// const handleCheck = () => {
 	// 	setCheck((check) => !check);
 	// 	console.log("check");
 	// };
 	const handleCheck = () => {
-		setCheck(!check);
 		change();
 	};
 	return (
@@ -29,7 +28,7 @@ const CollapseItem = ({
 			<li
 				className={clsx(
 					{
-						[styles.active]: check,
+						[styles.active]: Ischeck,
 					},
 					"flex-1 text-light",
 				)}
@@ -41,7 +40,7 @@ const CollapseItem = ({
 					name={name}
 					value={id}
 					hidden
-					checked={check}
+					checked={Ischeck}
 					onChange={handleCheck}
 					// hidden
 					id={"filter-" + id}

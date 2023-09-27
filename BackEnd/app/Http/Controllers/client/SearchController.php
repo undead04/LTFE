@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\DB;
 class SearchController extends Controller
 {
 
-    function getSearchAjax(Request $request)
+    function getSearchAjax($key)
     {
-
-        $key = $request->input('key');
         if ($key == '') {
             return response()->json([
                 'errorCode' => 0,

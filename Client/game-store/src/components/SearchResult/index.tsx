@@ -3,10 +3,15 @@ import { clsx } from "clsx";
 import styles from "./SearchResult.module.scss";
 import SearchItem from "../SearchItem";
 
-const SearchResult = ({ children }: PropsWithChildren) => {
+type SearchResultProps = {
+	counter : number,
+}
+const SearchResult = ({ counter, children }: PropsWithChildren<SearchResultProps>) => {
 	return (
 		<div
-			className={clsx(styles.search_results, styles.active, "row")}
+			className={clsx(styles.search_results, {
+				[styles.active]: counter > 0
+			}, "row")}
 		>
 			<div id={styles.ListGames} className="col-12">
 				<div>
@@ -16,7 +21,7 @@ const SearchResult = ({ children }: PropsWithChildren) => {
 							"bg-dark border-bottom border-secondary text-light",
 						)}
 					>
-						2 games found
+						{ counter} games found
 					</div>
 					<div
 						className={clsx(
