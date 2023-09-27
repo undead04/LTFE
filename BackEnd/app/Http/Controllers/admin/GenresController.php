@@ -20,7 +20,7 @@ class GenresController extends Controller
     ];
     private $messages = [
         'typeNames.required' => "trường type name bắt buộc",
-        "name_Game.max" => "Name game :max kí tự cao nhất",
+        "typeNames.max" => "Name game :max kí tự cao nhất",
     ];
     public function index()
     {
@@ -37,9 +37,7 @@ class GenresController extends Controller
             return BaseResponse::error(400, $validator->messages()->toJson());
         }
 
-        $request->validate([
-            'typeNames' => 'required|max:100',
-        ]);
+
 
         try {
             $newType = new Type();

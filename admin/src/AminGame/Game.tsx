@@ -8,6 +8,7 @@ import gameServics, {
   gameMessage,
 } from "../services/gameServics";
 import { toast } from "react-toastify";
+
 const Game = () => {
   const [showModel, setShowModel] = useState(false);
   const [message, setMessage] = useState<gameMessage>();
@@ -24,10 +25,10 @@ const Game = () => {
     discount: 0,
     publisher: "",
     developer: "",
-    imageMain: "",
-    imagePaner: "",
-    imageLogo: "",
   });
+  const [imageMain, setImageMain] = useState<any>("");
+  const [imageLogo, setImageLogo] = useState();
+  const [imagePaner, setImagePaner] = useState();
   const handleCloseModel = () => setShowModel(false);
   const handleShowModel = () => setShowModel(true);
   const loadData = () => {
@@ -55,9 +56,6 @@ const Game = () => {
         discount: 0,
         publisher: "",
         developer: "",
-        imageMain: "",
-        imagePaner: "",
-        imageLogo: "",
       });
       handleShowModel();
     }
@@ -75,6 +73,8 @@ const Game = () => {
       setGenre(selectedValues);
     }
 
+    console.log(game);
+
     setGame({
       ...game,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -82,9 +82,13 @@ const Game = () => {
     });
   };
   const handleSave = (id: number) => {
+    const fData = new FormData();
+    fData.append("image", imageMain[0]);
     if (Number(id) === 0) {
-      gameServics.add(game).then((res) => {
+      gameServics.add({ ...game, image: fData }).then((res) => {
+        console.log(res.message);
         if (res.errorCode === 0) {
+          console.log(res);
           handleCloseModel();
           toast.success(res.message);
           loadData();
@@ -191,11 +195,7 @@ const Game = () => {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form
-            method="post"
-            className="mx-auto data_form"
-            encType="multipart/form-data"
-          >
+          <form className="mx-auto data_form">
             <h1 className="mb-3">
               <span className="fa-solid fa-gamepad" />{" "}
             </h1>
@@ -268,24 +268,22 @@ const Game = () => {
             />
             <Input
               label="Image Main"
-              name="imageMain"
+              name="image"
               type="file"
-              onChange={handleChange}
-              defaultValue={game.imageMain}
+              onChange={(e) => setImageMain(e.target.files)}
+              message={message?.imageMain}
             />
             <Input
               label="Image Paner"
               name="imagePaner"
               type="file"
               onChange={handleChange}
-              defaultValue={game.imagePaner}
             />
             <Input
               label="Image Logo"
               name="imageLogo"
               type="file"
               onChange={handleChange}
-              defaultValue={game.imageLogo}
             />
 
             <Input

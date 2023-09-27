@@ -17,6 +17,7 @@ use PHPUnit\TextUI\XmlConfiguration\Group;
 use App\Http\Controllers\client\ShoppingController;
 use App\Http\Controllers\client\MyAcountController;
 use App\Http\Controllers\client\SearchController;
+use App\Http\Controllers\ImageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,6 +45,7 @@ Route::prefix('/')->group(function () {
     Route::get('search', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
     Route::post('/member/register', [MembersController::class, 'register']);
     Route::post('/member/login', [MembersController::class, 'login']);
+    Route::post('image', [MembersController::class, 'upload']);
 });
 Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index'); //san phẩm trong cart

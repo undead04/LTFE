@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $viewData = [];
-        $users = DB::table('users')->get();
+        $users = DB::table('members')->get();
         $viewData['userCount'] = count($users);
 
         $games = DB::table('games')->get();
@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function user()
     {
 
-        $users = DB::table('users')->get();
+        $users = DB::table('members')->get();
         // dd($viewData['users']);
 
         return response()->json(['errorCode' => 0, 'message' => '', 'data' => [
