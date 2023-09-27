@@ -17,6 +17,7 @@ use PHPUnit\TextUI\XmlConfiguration\Group;
 use App\Http\Controllers\client\ShoppingController;
 use App\Http\Controllers\client\MyAcountController;
 use App\Http\Controllers\client\SearchController;
+use App\Http\Controllers\ImageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,6 +45,7 @@ Route::prefix('/')->group(function () {
     Route::get('search/{key}', [SearchController::class, 'getSearchAjax'])->name('search'); //lấy search
     Route::post('/member/register', [MembersController::class, 'register']);
     Route::post('/member/login', [MembersController::class, 'login']);
+    Route::post('image', [MembersController::class, 'upload']);
 });
 Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index'); //san phẩm trong cart
@@ -53,22 +55,22 @@ Route::prefix('cart')->group(function () {
     Route::post('purchaseNow/{id}', [ShoppingController::class, 'purchaseNow'])->name('cart.purchaseNow'); //mua ngay
     Route::get('myAcount', [MyAcountController::class, 'orders'])->name('cart.orders'); //xem hóa đơn
 });
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::prefix('admin')->group(function () {
-        Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home'); //dữ liệu trang admin Home
-        Route::get('/user', [AdminHomeController::class, 'user'])->name('admin.user'); //trang user
-        Route::get('/game', [GameController::class, 'index'])->name('admin.game.games'); //trang admin game
-        Route::post('/game/store', [GameController::class, 'store'])->name('admin.game.store'); //thêm game
-        Route::delete('/game/delete/{id}', [GameController::class, 'delete'])->name('admin.game.delete'); //xóa game
-        Route::get('game/edit/{id}', [GameController::class, 'edit'])->name('admin.game.edit'); //trang edit game
-        Route::put('game/update/{id}', [GameController::class, 'update'])->name('admin.game.update'); //edit game
-        Route::get('game/create', [GameController::class, 'create'])->name('admin.game.create'); //trang tạo game
-        Route::get('genre', [GenresController::class, 'index'])->name('admin.genre.genres'); //trang chứa bản thể loại
-        Route::post('genre/store', [GenresController::class, 'addGenres'])->name('admin.genres.store'); //trang thêm thể loại
-        Route::get('genre/create', [GenresController::class, 'create'])->name('admin.genre.create'); //trang input thêm thể loại
-        Route::get('genre/edit/{id}', [GenresController::class, 'edit'])->name('admin.genre.edit'); //trang sữa thể loại
-        Route::put('genre/update/{id}', [GenresController::class, 'update'])->name('admin.genre.update'); //update thể loại
-        Route::delete('/genre/delete/{id}', [GenresController::class, 'delete'])->name('admin.genre.delete'); //xóa thể loại
-        Route::get('/profile', [ProfitController::class, 'index'])->name('admin.profit.index'); //trang profit
-    });
+//Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home'); //dữ liệu trang admin Home
+    Route::get('/user', [AdminHomeController::class, 'user'])->name('admin.user'); //trang user
+    Route::get('/game', [GameController::class, 'index'])->name('admin.game.games'); //trang admin game
+    Route::post('/game/store', [GameController::class, 'store'])->name('admin.game.store'); //thêm game
+    Route::delete('/game/delete/{id}', [GameController::class, 'delete'])->name('admin.game.delete'); //xóa game
+    Route::get('game/edit/{id}', [GameController::class, 'edit'])->name('admin.game.edit'); //trang edit game
+    Route::put('game/update/{id}', [GameController::class, 'update'])->name('admin.game.update'); //edit game
+    Route::get('game/create', [GameController::class, 'create'])->name('admin.game.create'); //trang tạo game
+    Route::get('genre', [GenresController::class, 'index'])->name('admin.genre.genres'); //trang chứa bản thể loại
+    Route::post('genre/store', [GenresController::class, 'addGenres'])->name('admin.genres.store'); //trang thêm thể loại
+    Route::get('genre/create', [GenresController::class, 'create'])->name('admin.genre.create'); //trang input thêm thể loại
+    Route::get('genre/edit/{id}', [GenresController::class, 'edit'])->name('admin.genre.edit'); //trang sữa thể loại
+    Route::put('genre/update/{id}', [GenresController::class, 'update'])->name('admin.genre.update'); //update thể loại
+    Route::delete('/genre/delete/{id}', [GenresController::class, 'delete'])->name('admin.genre.delete'); //xóa thể loại
+    Route::get('/profile', [ProfitController::class, 'index'])->name('admin.profit.index'); //trang profit
 });
+//});

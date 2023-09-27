@@ -61,7 +61,23 @@ class MembersController extends Controller
 
             return BaseResponse::withData($data);
         } else {
+
             return BaseResponse::error(1, 'Wrong email or password');
+        }
+    }
+    public function upload(Request $request)
+    {
+        return $request->file('image');
+
+        $viewData[] = $request->input('name');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $file->getClientOriginalName();
+            $viewData[] = $fileName;
+
+            return response()->json(['data' => $viewData]);
+        } else {
+            return response()->json(['message' => "them anh thaats baij"]);
         }
     }
 }

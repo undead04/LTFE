@@ -2,11 +2,16 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Input from "../component/Input";
-import gameServics, { IGameAdd, ITypeAdd } from "../services/gameServics";
+import gameServics, {
+  IGameAdd,
+  ITypeAdd,
+  gameMessage,
+} from "../services/gameServics";
+import { toast } from "react-toastify";
 
 const Game = () => {
   const [showModel, setShowModel] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<gameMessage>();
   const [title, setTitle] = useState("");
   const [listGame, setListGame] = useState<IGameAdd[]>([]);
   const [listType, setListType] = useState<ITypeAdd[]>([]);
@@ -20,10 +25,10 @@ const Game = () => {
     discount: 0,
     publisher: "",
     developer: "",
-    imageMain: "",
-    imagePaner: "",
-    imageLogo: "",
   });
+  const [imageMain, setImageMain] = useState<any>("");
+  const [imageLogo, setImageLogo] = useState();
+  const [imagePaner, setImagePaner] = useState();
   const handleCloseModel = () => setShowModel(false);
   const handleShowModel = () => setShowModel(true);
   const loadData = () => {
@@ -51,9 +56,6 @@ const Game = () => {
         discount: 0,
         publisher: "",
         developer: "",
-        imageMain: "",
-        imagePaner: "",
-        imageLogo: "",
       });
       handleShowModel();
     }
@@ -71,6 +73,8 @@ const Game = () => {
       setGenre(selectedValues);
     }
 
+    console.log(game);
+
     setGame({
       ...game,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -78,29 +82,45 @@ const Game = () => {
     });
   };
   const handleSave = (id: number) => {
+    const fData = new FormData();
+    fData.append("image", imageMain[0]);
     if (Number(id) === 0) {
-      gameServics.add(game).then((res) => {
+      gameServics.add({ ...game, image: fData }).then((res) => {
+        console.log(res.message);
         if (res.errorCode === 0) {
+          console.log(res);
           handleCloseModel();
+          toast.success(res.message);
           loadData();
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
         }
       });
     } else {
       gameServics.update(id, game).then((res) => {
-        handleCloseModel();
-        loadData();
+        if (res.errorCode === 0) {
+          handleCloseModel();
+          toast.success(res.message);
+          loadData();
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
+        }
       });
     }
   };
+
   useEffect(() => {
     loadData();
   }, []);
   const handleDelete = (e: any, id: number) => {
     e.preventDefault();
-    console.log(id);
+
     gameServics.delete(id).then((res) => {
       if (res.errorCode === 0) {
         loadData();
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
     });
   };
@@ -175,11 +195,7 @@ const Game = () => {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form
-            method="post"
-            className="mx-auto data_form"
-            encType="multipart/form-data"
-          >
+          <form className="mx-auto data_form">
             <h1 className="mb-3">
               <span className="fa-solid fa-gamepad" />{" "}
             </h1>
@@ -188,13 +204,16 @@ const Game = () => {
               name="name_Game"
               type="text"
               onChange={handleChange}
+              message={message?.name_Game}
               defaultValue={game.name_Game}
             />
+
             <Input
               label="Developer"
               name="developer"
               type="text"
               onChange={handleChange}
+              message={message?.developer}
               defaultValue={game.developer}
             />
             <Input
@@ -202,6 +221,7 @@ const Game = () => {
               name="publisher"
               type="text"
               onChange={handleChange}
+              message={message?.publisher}
               defaultValue={game.publisher}
             />
             <div className="form-group">
@@ -225,6 +245,7 @@ const Game = () => {
                     </option>
                   ))}
                 </select>
+                <span className="text-danger">{message?.genre}</span>
               </div>
             </div>
 
@@ -235,6 +256,7 @@ const Game = () => {
               step={0.01}
               onChange={handleChange}
               defaultValue={game.price}
+              message={message?.price}
             />
             <Input
               label="Discount"
@@ -242,27 +264,26 @@ const Game = () => {
               type="number"
               onChange={handleChange}
               defaultValue={game.discount}
+              message={message?.discount}
             />
             <Input
               label="Image Main"
-              name="imageMain"
+              name="image"
               type="file"
-              onChange={handleChange}
-              defaultValue={game.imageMain}
+              onChange={(e) => setImageMain(e.target.files)}
+              message={message?.imageMain}
             />
             <Input
               label="Image Paner"
               name="imagePaner"
               type="file"
               onChange={handleChange}
-              defaultValue={game.imagePaner}
             />
             <Input
               label="Image Logo"
               name="imageLogo"
               type="file"
               onChange={handleChange}
-              defaultValue={game.imageLogo}
             />
 
             <Input
@@ -270,6 +291,7 @@ const Game = () => {
               name="description"
               row={3}
               onChange={handleChange}
+              message={message?.description}
               defaultValue={game.description}
             />
           </form>

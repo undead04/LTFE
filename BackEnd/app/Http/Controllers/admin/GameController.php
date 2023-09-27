@@ -39,38 +39,33 @@ class GameController extends Controller
         'price' => "required|numeric|gte:0",
         'discount' => "required|numeric|gte:0|max:100",
         "genre" => 'required',
-        "discription" => 'required',
-    ];
-    private $messages = [
-        'name_Game.required' => "trường name bắt buộc",
-        "name_Game.max" => "Name game :max kí tự cao nhất",
-        "name_Game.min" => "Name game tối thiểu :min kí tự",
-        "publisher.required" => ':attributes bắt buộc',
-        "publisher.min" => ':attributes tối thiểu :min kí tự',
-        "developer.required" => ':attributes bắt buộc',
-        "developer.min" => ':attributes tối thiểu :min kí tự',
-        "price.required" => ':attributes bắt buộc',
-        "price.numeric" => ':attributes phải là số',
-        "price.gte" => ':attributes phải lớn hơn :gte',
-        "discount.required" => ':attributes bắt buộc',
-        "discount.numeric" => ':attributes phải là số',
-        "discount.gte" => ':attributes phải lớn hơn :gte',
-        "discount.max" => ':attributes phải nhơ hơn hoặc băng :max',
-        'genre.required' => "trường :attributes bắt buộc",
-        'discription.required' => "trường :attributes bắt buộc",
-
+        "description" => 'required',
+        "image" => 'image',
 
     ];
+    private $messages = [];
 
     public function store(Request $request)
     {
         $genres = $request->input('genre');
+
         $validator = Validator::make($request->all(), $this->rules, $this->messages);
         if ($validator->fails()) {
+            return BaseResponse::withData($request->all());
             return BaseResponse::error(400, $validator->messages()->toJson());
         }
+
         try {
             $newGame = new Game();
+
+            if ($request->hasFile('imageMain')) {
+                $imageName = uniqid() . "."  . $request->file('imageMain')->extension();
+                Storage::disk('public')->put(
+                    $imageName,
+                    file_get_contents($request->file('imageMain')->getRealPath())
+                );
+                $newGame->setImage($imageName);
+            }
             $newGame->setNameGame($request->input('name_Game'));
             $newGame->setDescription($request->input('description'));
             $newGame->setPrice($request->input('price'));
@@ -81,16 +76,9 @@ class GameController extends Controller
             $newGame->setImagePaner('');
             $newGame->setDeveloper($request->input('developer'));
             $newGame->setDiscount($request->input('discount'));
-            $newGame->save();
 
-            if ($request->hasFile('imageMain')) {
-                $imageName = uniqid() . "."  . $request->file('imageMain')->extension();
-                Storage::disk('public')->put(
-                    $imageName,
-                    file_get_contents($request->file('imageMain')->getRealPath())
-                );
-                $newGame->setImage($imageName);
-            }
+
+
             if ($request->hasFile('imagePaner')) {
                 $imageName = uniqid() . "."  . $request->file('imagePaner')->extension();
                 Storage::disk('public')->put(
@@ -114,6 +102,7 @@ class GameController extends Controller
                 $newTypeGame->setTypeId($genre);
                 $newTypeGame->save();
             }
+
             return BaseResponse::success('Thêm game thành công');
         } catch (Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);

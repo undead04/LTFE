@@ -1,5 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import benefitServe, { IBenefi } from "./services/benefitServe";
 const Benefit = () => {
+  const [list, setList] = useState<IBenefi[]>([]);
+  const loadData = () => {
+    benefitServe.list().then((res) => {
+      setList(res.data.orders);
+    });
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
   return (
     <>
       <section className="py-5 bg-info-subtle min-vh-100">
@@ -29,17 +39,14 @@ const Benefit = () => {
                       </tr>
                     </thead>
                     <tbody className="table-group-divider">
-                      <tr>
-                        <th scope="row"></th>
-                        <td>
-                          <a
-                            className="text-primary text-decoration-underline"
-                            href=""
-                          />
-                        </td>
-                        <td className="text-success">+₫</td>
-                        <td></td>
-                      </tr>
+                      {list.map((item, index) => (
+                        <tr key={index}>
+                          <th scope="row">{item.id}</th>
+                          <td>{item.name_Game}</td>
+                          <td className="text-success">+₫ {item.price}</td>
+                          <td>{item.created_at}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

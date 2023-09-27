@@ -9,6 +9,9 @@ export interface IGenre {
   id: number;
   typeNames: string;
 }
+export interface IMessage {
+  typeNames: string[];
+}
 const list = () =>
   api
     .get<ResponseWrapper<genreInfo<IGenre[]>>>(api.url.genre)

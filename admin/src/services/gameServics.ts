@@ -10,7 +10,18 @@ type gameInfo<T> = {
   games: T;
   typeGame: T[];
 };
-
+export interface gameMessage {
+  name_Game: string[];
+  description: string[];
+  price: string[];
+  genre: string[];
+  discount: string[];
+  publisher: string[];
+  developer: string[];
+  imageMain: string[];
+  imagePaner: string[];
+  imageLogo: string[];
+}
 export interface IGameAdd {
   id: number;
   name_Game: string;
@@ -20,9 +31,7 @@ export interface IGameAdd {
   discount: number;
   publisher: string;
   developer: string;
-  imageMain: string;
-  imagePaner: string;
-  imageLogo: string;
+  image?: any;
 }
 export interface ITypeAdd {
   id: number;
@@ -42,10 +51,12 @@ const get = (id: number) =>
     .get<ResponseWrapper<gameInfo<IGameAdd>>>(`${api.url.game}/edit/${id}`)
 
     .then((res) => res.data);
-const add = (data: IGameAdd) =>
-  api
+const add = (data: IGameAdd) => {
+  return api
     .post<ResponseWrapper<gameInfo<IGameAdd>>>(`${api.url.game}/store`, data)
     .then((res) => res.data);
+};
+
 const update = (id: number, data: IGameAdd) =>
   api
     .put<ResponseWrapper<gameInfo<IGameAdd>>>(

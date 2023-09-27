@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Input from "../component/Input";
-import genreServics, { IGenre } from "../services/genreServics";
+import genreServics, { IGenre, IMessage } from "../services/genreServics";
+import { toast } from "react-toastify";
 
 const Genre = () => {
   const [showModel, setShowModel] = useState(false);
@@ -14,6 +15,7 @@ const Genre = () => {
     id: 0,
     typeNames: "",
   });
+  const [message, setMessage] = useState<IMessage>();
   const handleShowPage = (e: any, id: number) => {
     if (e) e.preventDefault();
     if (id > 0) {
@@ -25,7 +27,6 @@ const Genre = () => {
     handleShowModel();
   };
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(genre);
     setGenre({
       ...genre,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -34,14 +35,22 @@ const Genre = () => {
   const handleSave = (id: number) => {
     if (id > 0) {
       genreServics.update(id, genre).then((res) => {
-        handleCloseModel();
-        loadData();
+        if (res.errorCode === 0) {
+          handleCloseModel();
+          loadData();
+          toast.success(res.message);
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
+        }
       });
     } else {
       genreServics.add(genre).then((res) => {
         if (res.errorCode === 0) {
           handleCloseModel();
           loadData();
+          toast.success(res.message);
+        } else {
+          setMessage(JSON.parse(decodeURIComponent(res.message)));
         }
       });
     }
@@ -52,6 +61,7 @@ const Genre = () => {
     genreServics.delete(id).then((res) => {
       if (res.errorCode === 0) {
         loadData();
+        toast.success(res.message);
       }
     });
   };
@@ -136,13 +146,14 @@ const Genre = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form method="post">
+          <form>
             <Input
               type="text"
               label="Type Name"
               name="typeNames"
               onChange={handleChange}
               value={genre.typeNames}
+              message={message?.typeNames}
             />
           </form>
         </Modal.Body>
