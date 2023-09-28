@@ -26,6 +26,12 @@ const SearchInput = ({
 }: React.PropsWithChildren<searchProps>) => {
 	const [active, setActive] = useState(false);
 	const [value, setValue] = useState("");
+	const blurHandler = () => {
+		const timeOutId = setTimeout(() => {
+			setActive(false);
+			clearTimeout(timeOutId);
+		}, 2000);
+	};
 	useEffect(() => {}, [active]);
 	return (
 		<div
@@ -48,7 +54,7 @@ const SearchInput = ({
 					value={value}
 					onChange={(e) => setValue(e.target.value)}
 					onFocus={() => setActive(true)}
-					onBlur={() => setActive(false)}
+					onBlur={blurHandler}
 					ref={searchRef}
 					{...others}
 				/>
