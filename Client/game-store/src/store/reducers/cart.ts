@@ -4,13 +4,6 @@ import { LoginInfo } from "../../services/userService";
 import { IGame } from "../../services/gameService";
 import CartItem from "./../../pages/Cart/CartItem";
 
-interface ICartItem {
-	id: number;
-	name: string;
-	price: number;
-	discount: number;
-}
-
 interface CartState {
 	cartList: Array<IGame>;
 }

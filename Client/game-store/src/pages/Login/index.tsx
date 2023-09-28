@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/reducers/auth";
+import { toast } from "react-toastify";
 const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -28,8 +29,10 @@ const Login = () => {
 					}),
 				);
 				navigate("/home");
+				toast.success("Login success fully");
 			} else {
-				setMessage(res.message);
+				// setMessage(res.message);
+				toast.error(res.message);
 			}
 		});
 	};
@@ -57,13 +60,13 @@ const Login = () => {
 									inputRef={emailRef}
 									title="EMAIL"
 									type="email"
-									message={message}
+									// message={message}
 								/>
 								<Input
 									inputRef={passwordRef}
 									title="PASSWORD"
 									type="password"
-									message={message}
+									// message={message}
 								/>
 								<div className="my-3 fs-secondary text-end me-4">
 									<label

@@ -1,18 +1,24 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import CartItem from "./CartItem";
-import styles from "./Cart.module.scss";
 import clsx from "clsx";
-import cartService from "../../services/cartService";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { Link, useNavigate } from "react-router-dom";
-import { remove } from "../../store/reducers/cart";
+
+import { RootState } from "../../store";
+import styles from "./Cart.module.scss";
+import CartItem from "./CartItem";
+import { deleteCart, remove } from "../../store/reducers/cart";
+import shoppingService from "../../services/shoppingService";
+
 const Cart = () => {
 	const isLoggedIn = useSelector(
 		(state: RootState) => state.auth.isLoggedIn,
 	);
 
+	const userInfoId = useSelector(
+		(state: RootState) => state.auth.userInfo?.id,
+	);
 	const getCartList = () => {
 		return cartList;
 	};
@@ -22,12 +28,8 @@ const Cart = () => {
 	const dispatch = useDispatch();
 	const removeCartItem = (id: number) => {
 		dispatch(remove({ id }));
+		toast.info("Game has been removed from your cart");
 	};
-	// const loadData = () => {
-	// 	cartService.list().then(res => {
-	// 		console.log(res.data);
-	// 	})
-	// }
 
 	const navigate = useNavigate();
 	const loadData = () => {
@@ -38,10 +40,7 @@ const Cart = () => {
 		}
 	};
 
-	// const [allPrice, setAllPrice] = useState(0);
-	// const [discountPrice, setDiscountPrice] = useState(0);
-	// const [subTotalPrice, setSubTotalPrice] = useState(0);
-
+	//  Price calculator
 	const allP = cartList.reduce((prev, cur) => {
 		return prev + cur.price;
 	}, 0);
@@ -50,14 +49,23 @@ const Cart = () => {
 		return prev + (cur.discount * cur.price) / 100;
 	}, 0);
 
-	useEffect(() => {
-		loadData();
-	}, []);
-
 	const priceFormat = new Intl.NumberFormat("vi-VN", {
 		style: "currency",
 		currency: "VND",
 	});
+
+	// Checkout all cart item
+	const checkOutHandler = () => {
+		if (userInfoId && cartList) {
+			shoppingService.checkout(userInfoId, cartList).then((res) => {
+				dispatch(deleteCart());
+				toast.success("Checkout successfully");
+			});
+		}
+	};
+	useEffect(() => {
+		loadData();
+	}, []);
 	return (
 		<>
 			<section className="bg-black py-5">
@@ -65,12 +73,6 @@ const Cart = () => {
 					{cartList.length > 0 ? (
 						<div className="row">
 							<div className="col-12 col-md-6 col-lg-8">
-								{/* <CartItem
-								id={1}
-								title="EA ESPORT VN VIETNAM"
-								price={10000}
-								imgSrc="http://localhost:8000/storage/650922e5c436b.webp"
-							/> */}
 								{cartList.map((item) => (
 									<CartItem
 										key={item.id}
@@ -119,15 +121,15 @@ const Cart = () => {
 											<span>Subtotal</span>
 											<span>{priceFormat.format(allP - allD)}</span>
 										</div>
-										<a
-											href="http://localhost:8000/cart/purchase"
+										<span
+											onClick={checkOutHandler}
 											className={clsx(
 												styles.payment_checkout,
 												"btn btn-primary btn-lg text-uppercase w-100",
 											)}
 										>
 											check out
-										</a>
+										</span>
 									</div>
 								</div>
 							</div>

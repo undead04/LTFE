@@ -91,7 +91,7 @@ class ShoppingController extends Controller
             $order->setTotal($total);
             $order->save();
         }
-        return response()->json(['errorCode' => 0, 'message' => 'mua game thanh cong', 'data' => '']);
+        return response()->json(['errorCode' => 0, 'message' => 'Checkout successfully', 'data' => '']);
     }
 
     public function purchaseNow($id)

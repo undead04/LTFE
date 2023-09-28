@@ -11,6 +11,8 @@ type NavItemProps = {
 	icons?: string;
 	capitalize?: boolean;
 	onClick?: any;
+	index?: number;
+	curIndex?: number;
 };
 
 const NavItem: FC<NavItemProps> = ({
@@ -21,12 +23,19 @@ const NavItem: FC<NavItemProps> = ({
 	icons,
 	capitalize,
 	onClick,
+	curIndex,
+	index = -1,
 }) => {
 	const classes = src
 		? clsx(styles.brand_img)
 		: clsx("text-light", styles.nav_options, className, {
-				[styles.capitalize]: capitalize,
+				[styles.active]: curIndex === index,
 		  });
+	const classes2 = src
+		? clsx(styles.brand_img)
+		: `text-light ${styles.nav_options} ${className} ${
+				curIndex === index ? [styles.active] : ""
+		  }`;
 	const navContent = !icons ? (
 		labelText
 	) : (
@@ -36,7 +45,12 @@ const NavItem: FC<NavItemProps> = ({
 		</>
 	);
 	return (
-		<NavLink onClick={onClick} to={to} className={classes}>
+		<NavLink
+			tabIndex={index}
+			onClick={onClick}
+			to={to}
+			className={classes2}
+		>
 			{src ? (
 				<img className="img-fluid" src={src} alt="logo" />
 			) : (

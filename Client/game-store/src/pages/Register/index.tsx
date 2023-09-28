@@ -5,14 +5,16 @@ import Input from "../../components/Input";
 import Disk from "../../components/Disk";
 import { Link, useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/reducers/auth";
 const Register = () => {
 	const navigate = useNavigate();
-	const [message, setMessage] = useState<string>("");
 	const nameRef = React.createRef<any>();
 	const emailRef = React.createRef<any>();
 	const passwordRef = React.createRef<any>();
 	const confirmRef = React.createRef<any>();
-
+	const dispatch = useDispatch();
 	const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const name = nameRef.current?.value;
@@ -22,11 +24,22 @@ const Register = () => {
 		if (confirmPass === password) {
 			userService.register(name, email, password).then((res) => {
 				if (res.errorCode === 0) {
-					setMessage("");
-					navigate("/home");
+					userService.login(email, password).then((res) => {
+						if (res.errorCode === 0) {
+							dispatch(
+								login({
+									token: res.data.accessToken,
+									userInfo: res.data,
+								}),
+							);
+							navigate("/home");
+							toast.success("Register successfully");
+						} else {
+							toast.error(res.message);
+						}
+					});
 				} else {
-					setMessage(res.message);
-					alert(message);
+					toast.error(res.message);
 				}
 			});
 		}
@@ -67,7 +80,6 @@ const Register = () => {
 									title="CONFIRM PASSWORD"
 									type="password"
 									name="comfirmPassword"
-									message={message}
 								/>
 								<hr />
 								<Button title="Register" color="red" />

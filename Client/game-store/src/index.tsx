@@ -8,6 +8,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import "./index.css";
 import App from "./App";
 import GlobalStyle from "./components/GlobalStyle";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement,
 );
@@ -17,6 +19,18 @@ root.render(
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistor}>
 					<BrowserRouter>
+						<ToastContainer
+							position="top-right"
+							autoClose={5000}
+							hideProgressBar={false}
+							newestOnTop={true}
+							closeOnClick={true}
+							rtl={false}
+							pauseOnFocusLoss
+							draggable
+							pauseOnHover
+							theme="colored"
+						/>
 						<App />
 					</BrowserRouter>
 				</PersistGate>

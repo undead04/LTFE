@@ -1,21 +1,22 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import NavItem from "../../components/NavItem";
 import styles from "./Header.module.css";
 import { clsx } from "clsx";
+import { Dropdown } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+
+import NavItem from "../../components/NavItem";
 import SearchInput from "./../../components/SearchInput/index";
 import SearchResult from "../../components/SearchResult";
 import SearchItem from "../../components/SearchItem";
-import { Dropdown } from "react-bootstrap";
 import { RootState } from "../../store";
-import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/reducers/auth";
+import { deleteCart } from "../../store/reducers/cart";
 import searchService, {
 	ISearchItem,
-	ISearchResult,
 } from "../../services/searchService";
-import { deleteCart } from "../../store/reducers/cart";
+
 const Header = () => {
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector(

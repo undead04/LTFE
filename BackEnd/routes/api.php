@@ -50,7 +50,7 @@ Route::prefix('cart')->group(function () {
     Route::get('', [ShoppingController::class, 'index'])->name('cart.index'); //san phẩm trong cart
     Route::post('add/{id}', [ShoppingController::class, 'add'])->name('cart.add'); // thêm sản phẩm trong cart
     Route::get('delete/{id}', [ShoppingController::class, 'delete'])->name('cart.delete'); //delete cart
-    Route::get('purchase', [ShoppingController::class, 'purchase'])->name('cart.purchase'); //thanh toán
+    Route::post('purchase', [ShoppingController::class, 'purchase'])->name('cart.purchase'); //thanh toán
     Route::post('purchaseNow/{id}', [ShoppingController::class, 'purchaseNow'])->name('cart.purchaseNow'); //mua ngay
     Route::get('myAcount', [MyAcountController::class, 'orders'])->name('cart.orders'); //xem hóa đơn
 });

@@ -1,24 +1,15 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import Image from "../../components/Image";
+import { toast } from "react-toastify";
 import clsx from "clsx";
-import styles from "./GameDetail.module.scss";
-import gameService, { IGame } from "../../services/gameService";
 import { useDispatch } from "react-redux";
+
+import styles from "./GameDetail.module.scss";
+import Image from "../../components/Image";
+import gameService, { IGame } from "../../services/gameService";
 import { add } from "../../store/reducers/cart";
-import cartService from "../../services/cartService";
-// type GameDetailProps = {
-// 	title: string;
-// 	imgBanner: string;
-// 	imgLogo: string;
-// 	price: number;
-// 	discount: number;
-// 	developer?: string;
-// 	publisher?: string;
-// 	genre?: string;
-// 	releaseDate?: Date;
-// };
+
 const GameDetail = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams<{ id: string }>();
@@ -39,6 +30,7 @@ const GameDetail = () => {
 		e.preventDefault();
 		if (game) {
 			dispatch(add({ cartItem: game }));
+			toast.info("Game has been added to your cart!");
 		}
 	};
 	useEffect(() => {

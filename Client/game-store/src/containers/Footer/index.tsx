@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import clsx from "clsx";
 import styles from "./Footer.module.scss";
 const Footer = () => {
+	const scrollTopHandler = () => {
+		window.scrollTo(0, 0);
+	};
 	return (
 		<footer className="bg-dark">
 			<div className="container py-3">
@@ -33,6 +36,7 @@ const Footer = () => {
 						<div>
 							<button
 								type="button"
+								onClick={scrollTopHandler}
 								className={clsx(
 									"d-flex justify-content-center align-items-center btn btn-sm btn-outline-secondary rounded-2",
 									styles.goup_btn,
