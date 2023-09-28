@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
 
 import styles from "./GameDetail.module.scss";
 import Image from "../../components/Image";
@@ -54,6 +55,7 @@ const GameDetail = () => {
 				.then((res) => {
 					if (res.errorCode === 0) {
 						console.log(res.message);
+						handleClose();
 
 						toast.success(res.message);
 					} else {
@@ -80,6 +82,9 @@ const GameDetail = () => {
 		style: "currency",
 		currency: "VND",
 	});
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 	return (
 		<>
 			{/* <h2>Game Detail Page : {Number(id)}</h2> */}
@@ -174,16 +179,16 @@ const GameDetail = () => {
 										</div>
 									)}
 								</div>
-								<form onSubmit={buyNowHandler} method="post">
-									<button
-										type="submit"
-										className="my-3 w-100 py-3 btn btn-lg btn-primary text-center"
-									>
-										{price * (1 - discount / 100) === 0
-											? "GET GAME"
-											: "BUY NOW"}
-									</button>
-								</form>
+
+								<button
+									type="submit"
+									onClick={handleShow}
+									className="my-3 w-100 py-3 btn btn-lg btn-primary text-center"
+								>
+									{price * (1 - discount / 100) === 0
+										? "GET GAME"
+										: "BUY NOW"}
+								</button>
 								<form onSubmit={addCartHandler}>
 									<button
 										type="submit"
@@ -232,6 +237,30 @@ const GameDetail = () => {
 					</div>
 				</div>
 			</section>
+			<Modal centered size="lg" show={show} onHide={handleClose}>
+				<Modal.Header className="bg-secondary" closeButton>
+					<Modal.Title className="text-light fs-primary">
+						Buy game now
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body className="bg-dark text-light fs-secondary">
+					Confirm your choice
+				</Modal.Body>
+				<Modal.Footer className="bg-secondary">
+					<Button
+						size="lg"
+						variant="outline-light"
+						onClick={handleClose}
+					>
+						Not now
+					</Button>
+					<form onSubmit={buyNowHandler} method="post">
+						<Button size="lg" variant="outline-light" type="submit">
+							Okay, no problem
+						</Button>
+					</form>
+				</Modal.Footer>
+			</Modal>
 		</>
 	);
 };

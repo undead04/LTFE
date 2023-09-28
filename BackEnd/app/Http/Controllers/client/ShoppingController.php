@@ -46,7 +46,7 @@ class ShoppingController extends Controller
 
         $gameItem = Game::find($id);
         if (!$gameItem) {
-            return response()->json(['errorCode' => 1, 'message' => 'Không tìm thấy sản phẩm', 'data' => ''], 401);
+            return response()->json(['errorCode' => 1, 'message' => 'No item found', 'data' => ''], 401);
         }
         $cart = Cache::get('cart', []);
         $cart[$id] = [
@@ -57,18 +57,18 @@ class ShoppingController extends Controller
             'image' => $gameItem->getImage(),
         ];
         Cache::put('cart', $cart, 3600); // 1 phút
-        return response()->json(['errorCode' => 0, 'message' => 'Đã thêm sản phẩm vào giỏ hàng', 'data' => ''], 201);
+        return response()->json(['errorCode' => 0, 'message' => 'Game has been added to your cart', 'data' => ''], 201);
     }
     public function delete($id)
     {
         $cart = Cache()->get('cart');
 
         if (!array_key_exists($id, $cart)) {
-            return response()->json(['errorCode' => 1, 'message' => 'không tìm thấy sản phẩm', 'data' => ''], 401);
+            return response()->json(['errorCode' => 1, 'message' => 'No games found', 'data' => ''], 401);
         }
         unset($cart[$id]);
         Cache()->put('cart', $cart);
-        return response()->json(['errorCode' => 0, 'message' => 'xóa sản phẩm thành công', 'data' => ''], 200);
+        return response()->json(['errorCode' => 0, 'message' => 'Game has been deleted from your cart', 'data' => ''], 200);
     }
     public function purchase(Request $request)
     {
@@ -111,9 +111,9 @@ class ShoppingController extends Controller
             $item->setGameId($game->getGameId());
             $item->setOrderId($order->getOrderId());
             $item->save();
-            return BaseResponse::success('mua game thanh cong');
+            return BaseResponse::success('Checkout successfully');
         } else {
-            return BaseResponse::error(404, 'không tìm thấy sản phẩm');
+            return BaseResponse::error(404, 'No games found');
         }
     }
 }
