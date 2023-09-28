@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\client;
 
+use App\Http\BaseResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Game;
 use App\Models\GameOrder;
@@ -94,30 +95,25 @@ class ShoppingController extends Controller
         return response()->json(['errorCode' => 0, 'message' => 'Checkout successfully', 'data' => '']);
     }
 
-    public function purchaseNow($id)
+    public function purchaseNow($id, Request $request)
     {
         $game = Game::find($id);
-
-        $userId = Auth::user()->getId();
-        $order = new Order();
-        $order->setUserId($userId);
-        $order->setTotal($game->getPrice());
-        $order->save();
-
-
-        $item = new GameOrder();
-        $item->setPrice($game->getPrice());
-        $item->setGameId($game->getGameId());
-        $item->setOrderId($order->getOrderId());
-        $item->save();
-        $order->save();
-
-        $newBalance = Auth::user()->getBalance() - $game->getPrice();
-        Auth::user()->setBalance($newBalance);
-        Auth::user()->save();
+        if ($game) {
+            $userId = $request->userId;
+            $order = new Order();
+            $order->setUserId($userId);
+            $order->setTotal($game['price'] - $game['price'] * $game['discount'] / 100);
+            $order->save();
 
 
-
-        return redirect()->back();
+            $item = new GameOrder();
+            $item->setPrice($game->getPrice());
+            $item->setGameId($game->getGameId());
+            $item->setOrderId($order->getOrderId());
+            $item->save();
+            return BaseResponse::success('mua game thanh cong');
+        } else {
+            return BaseResponse::error(404, 'không tìm thấy sản phẩm');
+        }
     }
 }
