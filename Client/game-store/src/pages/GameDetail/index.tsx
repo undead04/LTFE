@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./GameDetail.module.scss";
 import Image from "../../components/Image";
 import gameService, { IGame } from "../../services/gameService";
 import { add } from "../../store/reducers/cart";
+import shoppingService from "../../services/shoppingService";
+import { RootState } from "../../store";
 
 const GameDetail = () => {
 	const dispatch = useDispatch();
@@ -16,21 +18,51 @@ const GameDetail = () => {
 	const navigate = useNavigate();
 	const [game, setGame] = useState<IGame>();
 	const [genre, setGenre] = useState<Array<String>>([]);
+	const userInfoId = useSelector(
+		(state: RootState) => state.auth.userInfo?.id,
+	);
 
 	const loadData = () => {
 		gameService.get(Number(id)).then((res) => {
-			setGame(res.data.game);
-			if (res.data.type) {
-				setGenre(res.data.type);
+			if (res.errorCode === 0) {
+				setGame(res.data.game);
+				if (res.data.type) {
+					setGenre(res.data.type);
+				}
 			}
 		});
 	};
 
 	const addCartHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (game) {
-			dispatch(add({ cartItem: game }));
-			toast.info("Game has been added to your cart!");
+		if (userInfoId) {
+			if (game) {
+				dispatch(add({ cartItem: game }));
+				toast.info("Game has been added to your cart!");
+			}
+		} else {
+			navigate("/login");
+			toast.warning("You need to login before do these actions");
+		}
+	};
+
+	const buyNowHandler = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (userInfoId) {
+			shoppingService
+				.checkoutNow(Number(id), Number(userInfoId))
+				.then((res) => {
+					if (res.errorCode === 0) {
+						console.log(res.message);
+
+						toast.success(res.message);
+					} else {
+						navigate("/page-not-found");
+					}
+				});
+		} else {
+			navigate("/login");
+			toast.warning("You need to login before do these actions");
 		}
 	};
 	useEffect(() => {
@@ -142,7 +174,7 @@ const GameDetail = () => {
 										</div>
 									)}
 								</div>
-								<form action="/" method="post">
+								<form onSubmit={buyNowHandler} method="post">
 									<button
 										type="submit"
 										className="my-3 w-100 py-3 btn btn-lg btn-primary text-center"

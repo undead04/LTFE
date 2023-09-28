@@ -9,6 +9,7 @@ const url = {
 	cart: "/cart",
 	register: "/member/register",
 	search: "/search",
+	account: "/myAccount",
 };
 
 const instance = axios.create({
@@ -33,20 +34,23 @@ instance.interceptors.request.use((request) => {
 instance.interceptors.response.use(
 	(response) => response,
 	(err) => {
-		if (err.code === "ERR_NETWORK") {
-			window.location.href = "/network-error";
-		} else {
-			switch (err.response.status) {
-				case 401:
-					window.location.href = "/login";
-					break;
-				case 403:
-					window.location.href = "/network-error";
-					break;
-				default:
-					break;
-			}
-		}
+		// if (err.code === "ERR_NETWORK") {
+		// 	window.location.href = "/network-error";
+		// } else {
+		// 	switch (err.response.status) {
+		// 		case 401:
+		// 			window.location.href = "/login";
+		// 			break;
+		// 		case 403:
+		// 			window.location.href = "/network-error";
+		// 			break;
+		// 		case 404:
+		// 			window.location.href = "page-not-found";
+		// 			break;
+		// 		default:
+		// 			break;
+		// 	}
+		// }
 		return Promise.reject(err);
 	},
 );

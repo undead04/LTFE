@@ -52,7 +52,7 @@ Route::prefix('cart')->group(function () {
     Route::get('delete/{id}', [ShoppingController::class, 'delete'])->name('cart.delete'); //delete cart
     Route::post('purchase', [ShoppingController::class, 'purchase'])->name('cart.purchase'); //thanh toán
     Route::post('purchaseNow/{id}', [ShoppingController::class, 'purchaseNow'])->name('cart.purchaseNow'); //mua ngay
-    Route::get('myAcount', [MyAcountController::class, 'orders'])->name('cart.orders'); //xem hóa đơn
+    Route::post('myAccount', [MyAcountController::class, 'orders'])->name('cart.orders'); //xem hóa đơn
 });
 //Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::prefix('admin')->group(function () {

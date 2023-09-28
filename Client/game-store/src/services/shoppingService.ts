@@ -22,8 +22,19 @@ const checkout = (id: number, cart: Array<IGame>) => {
 		.then((res) => res.data);
 };
 
+const checkoutNow = (id: number, userId: number) => {
+	const data = { userId };
+	return api
+		.post<ResponseWrapper<null>>(
+			`${api.url.cart}/purchaseNow/${id}`,
+			data,
+		)
+		.then((res) => res.data);
+};
+
 const shoppingService = {
 	checkout,
+	checkoutNow,
 };
 
 export default shoppingService;

@@ -18,9 +18,9 @@ class GameController extends Controller
         if (!$game) {
             return response()->json([
                 'errorCode' => 1,
-                'message' => 'không tìm thấy sản phẩm',
+                'message' => 'Game not found',
                 'data' => ''
-            ], 401);
+            ], 404);
         }
         $title = $game->getNameGame() . ' | Details';
         $type = TypeGame::where('gameId', $game->getGameId())->get();
