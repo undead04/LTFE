@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\client;
 
+use App\Http\BaseResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -10,13 +11,14 @@ use Illuminate\Support\Facades\Schema;
 
 class MyAcountController extends Controller
 {
-    public function orders()
+    public function orders(Request $request)
     {
-        $viewData = [];
+        $userId = $request->userId;
+
         $viewData["title"] = "My Orders - Online Store";
         $viewData["subtitle"] = "My Orders";
-        $viewData["orders"] = Order::where('userId', Auth::user()->getId())->get();
+        $viewData["orders"] = Order::where('userId', $userId)->get();
 
-        return response()->json($viewData, 200);
+        return BaseResponse::withData($viewData);
     }
 }
